@@ -1,0 +1,58 @@
+# Caddyfile — multi-domain TLS reverse proxy for the portal.
+#
+# Why Caddy: it obtains and renews Let's Encrypt certs for EVERY domain below
+# automatically, over both HTTP-01 and TLS-ALPN-01. That's what makes the
+# "one domain gets blocked, the customer clicks the next" fallback strategy work
+# without you touching a certificate.
+#
+# Validate before reloading (Caddy is not installed in the build sandbox, so
+# this file has NOT been machine-checked here — run this on the VPS):
+#     caddy validate --config /etc/caddy/Caddyfile
+#     caddy reload   --config /etc/caddy/Caddyfile
+#
+# Domains: replace all three. Point each at this server's IP in DNS first —
+# Caddy can't issue a cert for a name that doesn't resolve here.
+
+# The three doors into the same portal. List the SAME domains in CFG.fallbacks
+# in static/index.html so the page's health-probe shows the customer which is up.
+dl-1.yourdomain.com,
+dl-2.yourdomain.net,
+dl-3.yourdomain.org {
+	# Log per-domain so you can see which door customers actually use.
+	log {
+		output file /var/log/caddy/portal-access.log
+		format json
+	}
+
+	# Installer files are big and their version tag is immutable. NOTE: stock
+	# Caddy does NOT cache response bodies — it streams them. server.js already
+	# sets `Cache-Control: public, max-age=604800, immutable` on /m/ routes, so a
+	# CDN in front (e.g. Cloudflare) or the client's browser does the caching.
+	# If you want Caddy itself to cache, add the Souin/caddy-cache plugin and
+	# build a custom binary — it is not in the standard release.
+	@mirror path /m/*
+	handle @mirror {
+		reverse_proxy 127.0.0.1:3000 {
+			# Long upstream timeouts — a 250 MB installer on a slow link is fine.
+			transport http {
+				read_timeout 30m
+				dial_timeout 30s
+			}
+		}
+		# Do NOT set Cache-Control here: server.js already sets it, and setting
+		# it again emits a duplicate header that CDNs handle inconsistently.
+	}
+
+	# Everything else (the page, manifest, catalog) goes to the portal.
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	# Basic hardening.
+	header {
+		Referrer-Policy "no-referrer"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+	encode zstd gzip
+}

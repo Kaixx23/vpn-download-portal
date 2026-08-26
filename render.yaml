@@ -1,0 +1,28 @@
+# render.yaml — one-click deploy. `render deploy` or push to a repo connected to Render.
+#
+# MODE=mirror is what makes this work for customers in China: Render's server
+# (outside China) pulls the installer from GitHub and streams it to the customer
+# through your *.onrender.com address, so the customer's browser never touches
+# GitHub (which is blocked). The tradeoff is bandwidth — every download flows
+# through Render, so watch the free-tier data limit as your customer count grows.
+services:
+  - type: web
+    name: vpn-download-portal
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev && npm run build:catalog
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 20.20.2
+      # mirror = stream the installer bytes through this server (the real fix — the
+      #            customer never reaches GitHub). REQUIRED for China.
+      # redirect = 307 the client to GitHub. Does NOT work in China: it sends the
+      #            customer straight to the site that's blocked. Don't use it.
+      - key: MODE
+        value: mirror
+      # Optional but strongly recommended: raises GitHub API limit 60/hr -> 5000/hr.
+      # A classic PAT with NO scopes is enough.
+      - key: GITHUB_TOKEN
+        sync: false

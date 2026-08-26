@@ -1,0 +1,700 @@
+{
+  "updated": "2026-08-25T22:57:19.088Z",
+  "resolver": "releases.atom + expanded_assets (not the rate-limited REST API)",
+  "sources": [
+    {
+      "id": "self",
+      "label": "This site",
+      "base": "",
+      "mode": "self"
+    },
+    {
+      "id": "gh",
+      "label": "GitHub (official)",
+      "base": "https://github.com",
+      "mode": "raw"
+    },
+    {
+      "id": "ghproxy",
+      "label": "Mirror A",
+      "base": "https://gh-proxy.com/",
+      "mode": "prefix"
+    },
+    {
+      "id": "ghproxy2",
+      "label": "Mirror B",
+      "base": "https://ghproxy.net/",
+      "mode": "prefix"
+    },
+    {
+      "id": "gofans",
+      "label": "Mirror C",
+      "base": "https://ghfast.top/",
+      "mode": "prefix"
+    }
+  ],
+  "ios": [
+    {
+      "id": "shadowrocket",
+      "name": "Shadowrocket",
+      "price": "US$2.99",
+      "appId": "932747118",
+      "updated": "maintained",
+      "note": "Top iOS pick. Requires a non-China Apple ID — removed from the China App Store, so a China Apple ID won't find it.",
+      "primary": true
+    },
+    {
+      "id": "surge5",
+      "name": "Surge 5",
+      "price": "free + IAP",
+      "appId": "1442620678",
+      "updated": "2026-08-11",
+      "note": "Most powerful, most actively updated. Complex rule engine — for technical users."
+    },
+    {
+      "id": "stash",
+      "name": "Stash",
+      "price": "US$5.99",
+      "appId": "1596063349",
+      "updated": "2026-07-16",
+      "note": "Clash ecosystem, the most flexible rules."
+    },
+    {
+      "id": "quantumultx",
+      "name": "Quantumult X",
+      "price": "paid",
+      "appId": "1443988620",
+      "updated": "maintained",
+      "note": "Long-standing, good REALITY support."
+    },
+    {
+      "id": "loon",
+      "name": "Loon",
+      "price": "US$4.99",
+      "appId": "1373567447",
+      "updated": "maintained",
+      "note": "Long-standing and stable."
+    },
+    {
+      "id": "karing",
+      "name": "Karing",
+      "price": "free",
+      "appId": "6472431552",
+      "updated": "2026-08-12",
+      "note": "Free + open source, sing-box core, native REALITY support. Best free option."
+    },
+    {
+      "id": "v2box",
+      "name": "V2Box",
+      "price": "free",
+      "appId": "6446814690",
+      "updated": "2026-08-17",
+      "note": "Free, simple UI, good for non-technical users."
+    },
+    {
+      "id": "streisand",
+      "name": "Streisand",
+      "price": "free",
+      "appId": "6450534064",
+      "updated": "2026-07-14",
+      "note": "Free alternative."
+    },
+    {
+      "id": "hiddify-ios",
+      "name": "Hiddify (iOS)",
+      "price": "free",
+      "appId": "6596777532",
+      "updated": "2026-02-19",
+      "note": "One subscription across Android/iOS/desktop."
+    }
+  ],
+  "apps": [
+    {
+      "id": "clash-verge",
+      "name": "Clash Verge Rev",
+      "tagline": "Recommended · desktop pick",
+      "why": "mihomo core, full VLESS + REALITY support, the friendliest UI, one-click subscription import.",
+      "repo": "clash-verge-rev/clash-verge-rev",
+      "tag": "v2.5.2",
+      "latestTag": "v2.5.2",
+      "os": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "windows",
+          "label": "Windows x64 installer",
+          "primary": true,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_x64-setup.exe",
+          "size": 46964366,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64-setup.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows ARM64",
+          "primary": false,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_arm64-setup.exe",
+          "size": 41452521,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_arm64-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_arm64-setup.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Pre-Win10 / no WebView2",
+          "primary": false,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe",
+          "size": 237316704,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Apple silicon (M1–M4)",
+          "primary": false,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_aarch64.dmg",
+          "size": 60935420,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_aarch64.dmg",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_aarch64.dmg"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Intel",
+          "primary": true,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_x64.dmg",
+          "size": 65843472,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64.dmg",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64.dmg"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .deb (Ubuntu/Debian)",
+          "primary": true,
+          "internal": false,
+          "file": "Clash.Verge_2.5.2_amd64.deb",
+          "size": 83045404,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_amd64.deb",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_amd64.deb"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .rpm (Fedora/openSUSE)",
+          "primary": false,
+          "internal": false,
+          "file": "Clash.Verge-2.5.2-1.x86_64.rpm",
+          "size": 83035866,
+          "sha256": null,
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge-2.5.2-1.x86_64.rpm",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge-2.5.2-1.x86_64.rpm"
+        }
+      ]
+    },
+    {
+      "id": "hiddify",
+      "name": "Hiddify",
+      "tagline": "Cross-platform · simplest",
+      "why": "Free and open source, the most foolproof subscription import. If you're not sure what to install, install this. Note: the repo was renamed from hiddify-next to hiddify-app.",
+      "repo": "hiddify/hiddify-app",
+      "tag": "v4.1.1",
+      "latestTag": "v4.1.2",
+      "os": [
+        "windows",
+        "macos",
+        "linux",
+        "android"
+      ],
+      "files": [
+        {
+          "os": "windows",
+          "label": "Windows x64 installer",
+          "primary": true,
+          "internal": false,
+          "file": "Hiddify-Windows-Setup-x64.exe",
+          "size": 36486310,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Setup-x64.exe",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Setup-x64.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows portable (no install)",
+          "primary": false,
+          "internal": false,
+          "file": "Hiddify-Windows-Portable-x64.zip",
+          "size": 117708800,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Portable-x64.zip",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Portable-x64.zip"
+        },
+        {
+          "os": "macos",
+          "label": "macOS .dmg",
+          "primary": true,
+          "internal": false,
+          "file": "Hiddify-MacOS.dmg",
+          "size": 83485931,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-MacOS.dmg",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-MacOS.dmg"
+        },
+        {
+          "os": "linux",
+          "label": "Linux AppImage",
+          "primary": false,
+          "internal": false,
+          "file": "Hiddify-Linux-x64-AppImage.AppImage",
+          "size": 55220728,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Linux-x64-AppImage.AppImage",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Linux-x64-AppImage.AppImage"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .deb",
+          "primary": false,
+          "internal": false,
+          "file": "Hiddify-Debian-x64.deb",
+          "size": 42466870,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Debian-x64.deb",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Debian-x64.deb"
+        },
+        {
+          "os": "android",
+          "label": "Android arm64 (most phones)",
+          "primary": true,
+          "internal": false,
+          "file": "Hiddify-Android-arm64.apk",
+          "size": 119028082,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-arm64.apk",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-arm64.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android universal (older devices)",
+          "primary": false,
+          "internal": false,
+          "file": "Hiddify-Android-universal.apk",
+          "size": 339558475,
+          "sha256": null,
+          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-universal.apk",
+          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-universal.apk"
+        }
+      ]
+    },
+    {
+      "id": "v2rayng",
+      "name": "v2rayNG",
+      "tagline": "Android pick",
+      "why": "The most mature Android client, native Xray core, the most complete VLESS + REALITY support.",
+      "repo": "2dust/v2rayNG",
+      "tag": "2.3.5",
+      "latestTag": "2.3.5",
+      "os": [
+        "android"
+      ],
+      "files": [
+        {
+          "os": "android",
+          "label": "arm64-v8a (phones from 2018 on)",
+          "primary": true,
+          "internal": false,
+          "file": "v2rayNG_2.3.5_arm64-v8a.apk",
+          "size": 32539012,
+          "sha256": null,
+          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_arm64-v8a.apk",
+          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_arm64-v8a.apk"
+        },
+        {
+          "os": "android",
+          "label": "armeabi-v7a (older phones)",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayNG_2.3.5_armeabi-v7a.apk",
+          "size": 32931394,
+          "sha256": null,
+          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_armeabi-v7a.apk",
+          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_armeabi-v7a.apk"
+        },
+        {
+          "os": "android",
+          "label": "x86_64 (emulator)",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayNG_2.3.5_x86_64.apk",
+          "size": 33512695,
+          "sha256": null,
+          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_x86_64.apk",
+          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_x86_64.apk"
+        },
+        {
+          "os": "android",
+          "label": "F-Droid build arm64",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayNG_2.3.5-fdroid_arm64-v8a.apk",
+          "size": 32539108,
+          "sha256": null,
+          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5-fdroid_arm64-v8a.apk",
+          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5-fdroid_arm64-v8a.apk"
+        }
+      ]
+    },
+    {
+      "id": "v2rayn",
+      "name": "v2rayN",
+      "tagline": "Windows veteran",
+      "why": "The most-used client on Windows, official Xray core. Note: recent versions are cross-platform, so files are named v2rayN-platform-arch.",
+      "repo": "2dust/v2rayN",
+      "tag": "7.24.8",
+      "latestTag": "7.24.8",
+      "os": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "windows",
+          "label": "Windows x64 desktop",
+          "primary": true,
+          "internal": false,
+          "file": "v2rayN-windows-64-desktop.zip",
+          "size": 131912198,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64-desktop.zip",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64-desktop.zip"
+        },
+        {
+          "os": "windows",
+          "label": "Windows x64 standard",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayN-windows-64.zip",
+          "size": 155926547,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64.zip",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64.zip"
+        },
+        {
+          "os": "windows",
+          "label": "Windows 32-bit",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayN-windows-86-desktop.zip",
+          "size": 133435827,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-86-desktop.zip",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-86-desktop.zip"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Apple silicon",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayN-macos-arm64.dmg",
+          "size": 123994193,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-arm64.dmg",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-arm64.dmg"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Intel",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayN-macos-64.dmg",
+          "size": 130555510,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-64.dmg",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-64.dmg"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .deb",
+          "primary": false,
+          "internal": false,
+          "file": "v2rayN-linux-64.deb",
+          "size": 79798012,
+          "sha256": null,
+          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-linux-64.deb",
+          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-linux-64.deb"
+        }
+      ]
+    },
+    {
+      "id": "clash-party",
+      "name": "Clash Party",
+      "tagline": "formerly mihomo-party",
+      "why": "mihomo-party was renamed Clash Party. Bundles its own core and ships a Windows 7 build — use it for customers on old machines.",
+      "repo": "mihomo-party-org/clash-party",
+      "tag": "v2.0.2",
+      "latestTag": "v2.0.2",
+      "os": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "windows",
+          "label": "Windows 7 x64 (old machines)",
+          "primary": true,
+          "internal": false,
+          "file": "clash-party-win7-2.0.2-x64-setup.exe",
+          "size": 152925625,
+          "sha256": "d850b658c52d7b9d25debc25e511f0d0cbcc12cdfb3ec0e14072be56e7948272",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows 7 32-bit",
+          "primary": false,
+          "internal": false,
+          "file": "clash-party-win7-2.0.2-ia32-setup.exe",
+          "size": 146756009,
+          "sha256": "de7e5d83536d27209aa9c3f46ac9c78a8bdc8f83dd59f1d4fe6021daa2656edd",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows x64 (Win10/11)",
+          "primary": false,
+          "internal": false,
+          "file": "clash-party-windows-2.0.2-x64-setup.exe",
+          "size": 183658985,
+          "sha256": "d1cb83f621a7ce530ab1fe24cfee92e7646b8244a43c65ad7a5eb03563896cae",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Apple silicon .pkg",
+          "primary": false,
+          "internal": false,
+          "file": "clash-party-macos-2.0.2-arm64.pkg",
+          "size": 229845688,
+          "sha256": "438c65bd5cdd8e0fda1fb858bee4b1de4ee7c05f031047a6a597109734edf62b",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Intel .pkg",
+          "primary": false,
+          "internal": false,
+          "file": "clash-party-macos-2.0.2-x64.pkg",
+          "size": 244803135,
+          "sha256": "3e7a54146f0a740828103a9cb4103788813b6b91a8bbf26135485d74fe4e1f42",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .deb",
+          "primary": false,
+          "internal": false,
+          "file": "clash-party-linux-2.0.2-amd64.deb",
+          "size": 189303364,
+          "sha256": "72294237e75d66db70f97bdd222eb7a60f69f101eadb2672646462d8b67f2550",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb"
+        }
+      ]
+    },
+    {
+      "id": "nekobox",
+      "name": "NekoBox for Android",
+      "tagline": "Android alternative",
+      "why": "Dual sing-box/Xray cores, imports your exported yaml directly. Note: the desktop NekoRay repo is archived/unmaintained, but the Android build is still updated.",
+      "repo": "MatsuriDayo/NekoBoxForAndroid",
+      "tag": "1.4.2",
+      "latestTag": "1.4.2",
+      "os": [
+        "android"
+      ],
+      "files": [
+        {
+          "os": "android",
+          "label": "arm64-v8a",
+          "primary": true,
+          "internal": false,
+          "file": "NekoBox-1.4.2-arm64-v8a.apk",
+          "size": 15252519,
+          "sha256": null,
+          "rel": "MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk",
+          "upstream": "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk"
+        },
+        {
+          "os": "android",
+          "label": "armeabi-v7a (older phones)",
+          "primary": false,
+          "internal": false,
+          "file": "NekoBox-1.4.2-armeabi-v7a.apk",
+          "size": 15509280,
+          "sha256": null,
+          "rel": "MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk",
+          "upstream": "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk"
+        }
+      ]
+    },
+    {
+      "id": "throne",
+      "name": "Throne",
+      "tagline": "sing-box desktop",
+      "why": "The community successor after NekoRay went unmaintained. Cross-platform, good REALITY support.",
+      "repo": "throneproj/Throne",
+      "tag": "1.2.4",
+      "latestTag": "1.2.4",
+      "os": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "windows",
+          "label": "Windows universal installer",
+          "primary": true,
+          "internal": false,
+          "file": "Throne-1.2.4-windows-universal-installer.exe",
+          "size": 107560714,
+          "sha256": null,
+          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windows-universal-installer.exe",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windows-universal-installer.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows 7/8 64-bit",
+          "primary": false,
+          "internal": false,
+          "file": "Throne-1.2.4-windowslegacy64.zip",
+          "size": 35444339,
+          "sha256": null,
+          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windowslegacy64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windowslegacy64.zip"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Apple silicon",
+          "primary": false,
+          "internal": false,
+          "file": "Throne-1.2.4-macos-arm64.zip",
+          "size": 50861032,
+          "sha256": null,
+          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-macos-arm64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-macos-arm64.zip"
+        },
+        {
+          "os": "linux",
+          "label": "Linux amd64",
+          "primary": false,
+          "internal": false,
+          "file": "Throne-1.2.4-linux-amd64.zip",
+          "size": 63136241,
+          "sha256": null,
+          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-linux-amd64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-linux-amd64.zip"
+        }
+      ]
+    },
+    {
+      "id": "xray-core",
+      "name": "Xray-core",
+      "tagline": "Server / advanced users",
+      "why": "The server-side core itself, or for customers who run their own node. Ordinary customers don't need this.",
+      "repo": "XTLS/Xray-core",
+      "tag": "v26.7.28",
+      "latestTag": "v26.7.28",
+      "os": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "linux",
+          "label": "Linux amd64",
+          "primary": true,
+          "internal": false,
+          "file": "Xray-linux-64.zip",
+          "size": 21164807,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip"
+        },
+        {
+          "os": "linux",
+          "label": "Linux arm64",
+          "primary": false,
+          "internal": false,
+          "file": "Xray-linux-arm64-v8a.zip",
+          "size": 19699639,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-arm64-v8a.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-arm64-v8a.zip"
+        },
+        {
+          "os": "macos",
+          "label": "macOS arm64",
+          "primary": false,
+          "internal": false,
+          "file": "Xray-macos-arm64-v8a.zip",
+          "size": 19753246,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-macos-arm64-v8a.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-macos-arm64-v8a.zip"
+        },
+        {
+          "os": "windows",
+          "label": "Windows 64-bit",
+          "primary": false,
+          "internal": false,
+          "file": "Xray-windows-64.zip",
+          "size": 20987981,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-windows-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-windows-64.zip"
+        },
+        {
+          "os": "windows",
+          "label": "Windows 7 64-bit",
+          "primary": false,
+          "internal": false,
+          "file": "Xray-win7-64.zip",
+          "size": 20988505,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-win7-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-win7-64.zip"
+        },
+        {
+          "os": "linux",
+          "label": "Checksum file Xray-linux-64.zip.dgst",
+          "primary": false,
+          "internal": true,
+          "file": "Xray-linux-64.zip.dgst",
+          "size": 299,
+          "sha256": null,
+          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip.dgst",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip.dgst"
+        }
+      ]
+    }
+  ]
+}

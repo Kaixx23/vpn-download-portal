@@ -1,0 +1,38 @@
+name: refresh-catalog
+
+# Re-resolves every client's /releases/latest and commits static/catalog.json,
+# so the portal never serves a stale build. Old cores = node timeouts = tickets.
+on:
+  schedule:
+    - cron: "20 4 * * *" # 04:20 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build catalog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/build-catalog.mjs
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name "catalog-bot"
+          git config user.email "catalog-bot@users.noreply.github.com"
+          git add static/catalog.json
+          if git diff --cached --quiet; then
+            echo "no upstream changes"
+          else
+            git commit -m "chore(catalog): refresh client versions $(date -u +%F)"
+            git push
+          fi

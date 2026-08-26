@@ -1,0 +1,19 @@
+# Keep the build context tiny and reproducible. Only server.js + static/ +
+# package.json are COPYed, but excluding these keeps accidental cruft out of
+# any layer and speeds up the build.
+node_modules
+.cache
+.git
+.github
+test
+scripts
+*.md
+Dockerfile
+.dockerignore
+.gitignore
+render.yaml
+fly.toml
+Caddyfile
+.page-test.mjs
+npm-debug.log*
+.env

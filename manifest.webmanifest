@@ -1,0 +1,26 @@
+{
+  "name": "SP VPN Downloads",
+  "short_name": "VPN Downloads",
+  "description": "VPN client downloads",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0f16",
+  "theme_color": "#0b0f16",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%232563eb'/%3E%3Cpath d='M96 34l54 24v36c0 32-23 58-54 62-31-4-54-30-54-62V58z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%232563eb'/%3E%3Cpath d='M256 90l144 64v96c0 86-61 155-144 166-83-11-144-80-144-166v-96z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
