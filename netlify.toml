@@ -1,0 +1,92 @@
+[build]
+  publish = "."
+  command = "echo 'No build needed - catalog.json is prebuilt'"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+[[headers]]
+  for = "/catalog.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
+  for = "*.apk"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+    Content-Type = "application/vnd.android.package-archive"
+
+[[headers]]
+  for = "/m/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+# --- API routes ---
+
+# /api/manifest is what index.html fetches - serve catalog.json
+[[redirects]]
+  from = "/api/manifest"
+  to = "/catalog.json"
+  status = 200
+  force = true
+
+# /vendor/qrcode.mjs -> flat layout has qrcode.mjs in root
+[[redirects]]
+  from = "/vendor/qrcode.mjs"
+  to = "/qrcode.mjs"
+  status = 200
+  force = true
+
+# /healthz - for fallback domain probing. 
+# The frontend uses fetch with no-cors, so any 200 is considered reachable.
+# We serve a tiny JSON via edge function if present, otherwise fallback to 200.
+[[redirects]]
+  from = "/healthz"
+  to = "/.netlify/edge-functions/healthz"
+  status = 200
+  force = false
+
+# --- Download mirroring ---
+# OPTION 1: Redirect mode (default, works on Netlify free tier, no bandwidth cost)
+# This 302s the client directly to GitHub. For China, GitHub may be throttled,
+# but users can switch to Mirror A/B/C in the UI (gh-proxy etc).
+[[redirects]]
+  from = "/m/*"
+  to = "https://github.com/:splat"
+  status = 302
+  force = true
+
+# OPTION 2: True mirror via Edge Function (uncomment to enable)
+# If you want /m/ to proxy through Netlify (like MODE=mirror), comment out the
+# redirect above and uncomment the edge function below. Note: Netlify Edge
+# Functions have streaming support but large files (50MB+) may hit limits on
+# free tier. For production China use, a VPS with Caddy is still recommended.
+# [[edge_functions]]
+#   path = "/m/*"
+#   function = "mirror"
+
+# SPA fallback - must be last
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Edge Functions declarations
+[[edge_functions]]
+  path = "/healthz"
+  function = "healthz"
+
+# Uncomment to enable true mirror mode
+# [[edge_functions]]
+#   path = "/m/*"
+#   function = "mirror"

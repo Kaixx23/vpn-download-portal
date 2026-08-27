@@ -1,0 +1,11 @@
+# Netlify _redirects fallback (netlify.toml is primary)
+# API
+/api/manifest  /catalog.json  200
+/vendor/qrcode.mjs  /qrcode.mjs  200
+/healthz  /.netlify/edge-functions/healthz  200
+
+# Download mirroring - redirect mode (default)
+/m/*  https://github.com/:splat  302
+
+# SPA fallback
+/*  /index.html  200
