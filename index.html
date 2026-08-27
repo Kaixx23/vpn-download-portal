@@ -256,7 +256,19 @@ macOS / Linux:         shasum -a 256 filename</pre>
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { qrcode } from '/vendor/qrcode.mjs';
+// Resilient QR loader - tries /vendor/qrcode.mjs (original layout) then /qrcode.mjs (flat/Netlify)
+let qrcode;
+try {
+  const m = await import('/vendor/qrcode.mjs');
+  qrcode = m.qrcode;
+} catch {
+  try {
+    const m = await import('/qrcode.mjs');
+    qrcode = m.qrcode;
+  } catch (e) {
+    console.error('Failed to load qrcode lib', e);
+  }
+}
 
 /* ============ CONFIG — edit these lines ============ */
 const CFG = {
@@ -473,7 +485,11 @@ $('#apps').innerHTML = '<div class="skel"></div><div class="skel"></div><div cla
 
 (async () => {
   try {
-    const r = await fetch('/api/manifest', { cache: 'no-store' });
+    let r = await fetch('/api/manifest', { cache: 'no-store' });
+    if (!r.ok) {
+      // Fallback for Netlify static hosting where /api/manifest redirect may not be configured
+      r = await fetch('/catalog.json', { cache: 'no-store' });
+    }
     if (!r.ok) throw new Error('HTTP ' + r.status);
     CAT = await r.json();
   } catch (e) {

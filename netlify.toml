@@ -47,14 +47,11 @@
   status = 200
   force = true
 
-# /healthz - for fallback domain probing. 
-# The frontend uses fetch with no-cors, so any 200 is considered reachable.
-# We serve a tiny JSON via edge function if present, otherwise fallback to 200.
 [[redirects]]
-  from = "/healthz"
-  to = "/.netlify/edge-functions/healthz"
+  from = "/vendor/*"
+  to = "/:splat"
   status = 200
-  force = false
+  force = true
 
 # --- Download mirroring ---
 # OPTION 1: Redirect mode (default, works on Netlify free tier, no bandwidth cost)
