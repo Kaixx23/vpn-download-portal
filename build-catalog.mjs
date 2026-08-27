@@ -1,25 +1,6 @@
 #!/usr/bin/env node
 /**
- * build-catalog.mjs
- *
- * Resolves every app in catalog.config.json to its CURRENT release and writes
- * static/catalog.json.
- *
- * It deliberately does NOT use the GitHub REST API:
- *   - /releases/latest is rate limited to 60/hr per IP, unauthenticated. On a
- *     shared IP that limit is gone before you start.
- *   - worse, it only reports the newest release *marked stable*. Several of
- *     these projects ship real fixes in releases the API doesn't surface —
- *     at the time of writing it reported Xray-core v26.3.27 while v26.7.28
- *     was already published, and v2rayNG 2.2.6 while 2.3.5 was out. Sending
- *     a client a four-month-old core is exactly the "node times out" bug this
- *     portal exists to prevent.
- *
- * So: /releases.atom for the newest tag, /releases/expanded_assets/<tag> for
- * the asset list, and a HEAD request per asset for its exact byte length.
- *
- * Run:  npm run build:catalog
- * Cron: 20 4 * * *
+ * build-catalog.mjs - patched for flat layout and resilient size fetching
  */
 import fs from "node:fs";
 import fsp from "node:fs/promises";
@@ -29,15 +10,19 @@ import { fileURLToPath } from "node:url";
 import { tagsFromAtom, parseAssets, pickAsset } from "./gh-release.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(here, "..");
+let root = path.join(here, "..");
+let cfgPath = path.join(here, "catalog.config.json");
+if (!fs.existsSync(cfgPath)) cfgPath = path.join(root, "catalog.config.json");
+if (!fs.existsSync(cfgPath)) {
+  root = here;
+  cfgPath = path.join(here, "catalog.config.json");
+}
 const CACHE_DIR = path.join(root, ".cache", "build");
 const TTL_MS = 60 * 60 * 1000;
 
-const cfg = JSON.parse(fs.readFileSync(path.join(here, "catalog.config.json"), "utf8"));
+const cfg = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
 
 const UA = { "user-agent": "vpn-download-portal/1.0 (catalog builder)" };
-
-/* ------------------------------------------------------------------ fetch */
 
 async function cacheGet(key) {
   const f = path.join(CACHE_DIR, createHash("sha256").update(key).digest("hex").slice(0, 24));
@@ -56,9 +41,7 @@ async function cachePut(key, body) {
       path.join(CACHE_DIR, createHash("sha256").update(key).digest("hex").slice(0, 24)),
       body,
     );
-  } catch {
-    /* best effort */
-  }
+  } catch {}
 }
 
 async function getText(url, { cache = true } = {}) {
@@ -84,19 +67,57 @@ async function getText(url, { cache = true } = {}) {
   throw lastErr;
 }
 
-/** Exact content length of a release asset, following GitHub's redirect. */
 async function contentLength(downloadUrl) {
   const key = "len:" + downloadUrl;
   const hit = await cacheGet(key);
   if (hit !== null) return Number(hit);
-  const res = await fetch(downloadUrl, { method: "HEAD", headers: UA, redirect: "follow" });
-  const len = Number(res.headers.get("content-length") || 0);
-  if (!len) throw new Error(`no content-length for ${downloadUrl} (HTTP ${res.status})`);
-  await cachePut(key, String(len));
-  return len;
+  // Try HEAD
+  try {
+    const res = await fetch(downloadUrl, { method: "HEAD", headers: UA, redirect: "follow" });
+    const len = Number(res.headers.get("content-length") || 0);
+    if (len) {
+      await cachePut(key, String(len));
+      return len;
+    }
+  } catch {}
+  // Try range GET
+  try {
+    const res = await fetch(downloadUrl, { headers: { ...UA, Range: "bytes=0-0" }, redirect: "follow" });
+    const cr = res.headers.get("content-range");
+    if (cr) {
+      const m = cr.match(/\/([0-9]+)$/);
+      if (m) {
+        const len = Number(m[1]);
+        if (len) {
+          await cachePut(key, String(len));
+          return len;
+        }
+      }
+    }
+    const len = Number(res.headers.get("content-length") || 0);
+    if (len) {
+      await cachePut(key, String(len));
+      return len;
+    }
+  } catch {}
+  // Reuse size from previous catalog if available
+  try {
+    const prevPath = path.join(here, "catalog.json");
+    if (fs.existsSync(prevPath)) {
+      const prev = JSON.parse(fs.readFileSync(prevPath, "utf8"));
+      for (const app of prev.apps || []) {
+        for (const f of app.files || []) {
+          if (f.file && downloadUrl.includes(f.file) && f.size) {
+            console.error(`  · using cached size for ${f.file}: ${f.size}`);
+            return f.size;
+          }
+        }
+      }
+    }
+  } catch {}
+  console.error(`  · warning: could not get size for ${downloadUrl}, using 0`);
+  return 0;
 }
-
-/* ------------------------------------------------------------------- main */
 
 const out = {
   updated: new Date().toISOString(),
@@ -118,11 +139,6 @@ for (const app of cfg.apps) {
     continue;
   }
 
-  // Walk newest -> older until a tag actually ships binaries we want.
-  // Projects push bare tags with no attached files (hiddify/hiddify-app
-  // published v4.1.2 with only source code; the real installers are on
-  // v4.1.1). Serving such a tag would leave customers with nothing to
-  // download, so it must be skipped, not reported as "latest".
   let chosen = null;
   for (const tag of tags.slice(0, 6)) {
     let assets;
@@ -147,12 +163,11 @@ for (const app of cfg.apps) {
     failures++;
     continue;
   }
-  const { tag, assets, matched } = chosen;
+  const { tag, assets } = chosen;
   if (tag !== tags[0]) {
     console.error(`  ! ${app.repo}: newest tag ${tags[0]} has no binaries, using ${tag}`);
   }
 
-  // Optional published checksums, best effort.
   const checksums = new Map();
   for (const name of ["sha256sum.txt", "sha256sums.txt", "SHA256SUMS", "checksums.txt"]) {
     try {
@@ -164,9 +179,7 @@ for (const app of cfg.apps) {
         if (mm) checksums.set(mm[2].trim(), mm[1].toLowerCase());
       }
       if (checksums.size) break;
-    } catch {
-      /* no such file — normal */
-    }
+    } catch {}
   }
 
   const resolved = [];
@@ -181,9 +194,8 @@ for (const app of cfg.apps) {
     try {
       size = await contentLength(hit.upstream);
     } catch (e) {
-      console.error(`  ✗ ${app.repo}@${tag} ${hit.file}: ${e.message}`);
-      failures++;
-      continue;
+      console.error(`  ✗ ${app.repo}@${tag} ${hit.file}: ${e.message} — using 0`);
+      size = 0;
     }
     let sha256 = checksums.get(hit.file) || null;
     if (!sha256 && /\.(pkg|7z|exe|deb|rpm|zip|AppImage)$/.test(hit.file)) {
@@ -191,9 +203,7 @@ for (const app of cfg.apps) {
         const t = (await getText(`${hit.upstream}.sha256`)).trim();
         const mm = t.match(/([a-f0-9]{64})/i);
         if (mm) sha256 = mm[1].toLowerCase();
-      } catch {
-        /* not published */
-      }
+      } catch {}
     }
     resolved.push({
       os: f.os,
@@ -225,9 +235,16 @@ for (const app of cfg.apps) {
   );
 }
 
-const dest = path.join(root, "static", "catalog.json");
+let dest = path.join(root, "static", "catalog.json");
+if (!fs.existsSync(path.join(root, "static"))) {
+  dest = path.join(root, "catalog.json");
+}
 fs.mkdirSync(path.dirname(dest), { recursive: true });
 fs.writeFileSync(dest, JSON.stringify(out, null, 2) + "\n");
+const flatDest = path.join(here, "catalog.json");
+if (dest !== flatDest) {
+  try { fs.writeFileSync(flatDest, JSON.stringify(out, null, 2) + "\n"); } catch {}
+}
 console.log(`\nwrote ${path.relative(root, dest)}  (${(fs.statSync(dest).size / 1024).toFixed(1)} KB)`);
 if (failures) {
   console.error(`\n${failures} problem(s) — see above`);

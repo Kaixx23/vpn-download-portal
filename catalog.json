@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25T22:57:19.088Z",
+  "updated": "2026-08-27T03:53:48.459Z",
   "resolver": "releases.atom + expanded_assets (not the rate-limited REST API)",
   "sources": [
     {
@@ -98,17 +98,183 @@
       "appId": "6450534064",
       "updated": "2026-07-14",
       "note": "Free alternative."
-    },
-    {
-      "id": "hiddify-ios",
-      "name": "Hiddify (iOS)",
-      "price": "free",
-      "appId": "6596777532",
-      "updated": "2026-02-19",
-      "note": "One subscription across Android/iOS/desktop."
     }
   ],
   "apps": [
+    {
+      "id": "clash-meta",
+      "name": "Clash Meta for Android",
+      "tagline": "Recommended · Android pick",
+      "why": "Top Android pick · Mihomo core (Clash Meta), full VLESS + REALITY, Hysteria, TUIC, best compatibility with your VPN. Most powerful and actively maintained Android client.",
+      "repo": "MetaCubeX/ClashMetaForAndroid",
+      "tag": "v2.11.33",
+      "latestTag": "v2.11.33",
+      "os": [
+        "android"
+      ],
+      "files": [
+        {
+          "os": "android",
+          "label": "Android arm64 (most phones)",
+          "primary": true,
+          "internal": false,
+          "file": "cmfa-2.11.33-meta-arm64-v8a-release.apk",
+          "size": 44839517,
+          "sha256": null,
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-arm64-v8a-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-arm64-v8a-release.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android armv7 (older phones)",
+          "primary": false,
+          "internal": false,
+          "file": "cmfa-2.11.33-meta-armeabi-v7a-release.apk",
+          "size": 45114811,
+          "sha256": null,
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-armeabi-v7a-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-armeabi-v7a-release.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android universal (all devices)",
+          "primary": false,
+          "internal": false,
+          "file": "cmfa-2.11.33-meta-universal-release.apk",
+          "size": 109026349,
+          "sha256": null,
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-universal-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-universal-release.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android x86_64 (emulator)",
+          "primary": false,
+          "internal": false,
+          "file": "cmfa-2.11.33-meta-x86_64-release.apk",
+          "size": 46667230,
+          "sha256": null,
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-x86_64-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-x86_64-release.apk"
+        }
+      ]
+    },
+    {
+      "id": "flclash",
+      "name": "FlClash",
+      "tagline": "Clash Meta · multi-platform",
+      "why": "Modern UI based on Clash Meta (mihomo) core, supports VLESS + REALITY + Hysteria, easy subscription import, works on Android and desktop. Great alternative to Clash Meta.",
+      "repo": "chen08209/FlClash",
+      "tag": "v0.8.96",
+      "latestTag": "v0.8.96",
+      "os": [
+        "android",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "files": [
+        {
+          "os": "android",
+          "label": "Android arm64 (most phones)",
+          "primary": true,
+          "internal": false,
+          "file": "FlClash-0.8.96-android-arm64-v8a.apk",
+          "size": 54956171,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-arm64-v8a.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-arm64-v8a.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android armv7 (older phones)",
+          "primary": false,
+          "internal": false,
+          "file": "FlClash-0.8.96-android-armeabi-v7a.apk",
+          "size": 54881045,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-armeabi-v7a.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-armeabi-v7a.apk"
+        },
+        {
+          "os": "android",
+          "label": "Android x86_64 (emulator)",
+          "primary": false,
+          "internal": false,
+          "file": "FlClash-0.8.96-android-x86_64.apk",
+          "size": 57217346,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-x86_64.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-x86_64.apk"
+        },
+        {
+          "os": "windows",
+          "label": "Windows x64 installer",
+          "primary": true,
+          "internal": false,
+          "file": "FlClash-0.8.96-windows-amd64-setup.exe",
+          "size": 37771618,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64-setup.exe",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64-setup.exe"
+        },
+        {
+          "os": "windows",
+          "label": "Windows x64 portable",
+          "primary": false,
+          "internal": false,
+          "file": "FlClash-0.8.96-windows-amd64.zip",
+          "size": 60321930,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64.zip",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64.zip"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Apple silicon",
+          "primary": true,
+          "internal": false,
+          "file": "FlClash-0.8.96-macos-arm64.dmg",
+          "size": 65481807,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-arm64.dmg",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-arm64.dmg"
+        },
+        {
+          "os": "macos",
+          "label": "macOS Intel",
+          "primary": false,
+          "internal": false,
+          "file": "FlClash-0.8.96-macos-amd64.dmg",
+          "size": 67904833,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-amd64.dmg",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-amd64.dmg"
+        },
+        {
+          "os": "linux",
+          "label": "Linux .deb (Ubuntu/Debian)",
+          "primary": true,
+          "internal": false,
+          "file": "FlClash-0.8.96-linux-amd64.deb",
+          "size": 42085932,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.deb",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.deb"
+        },
+        {
+          "os": "linux",
+          "label": "Linux AppImage",
+          "primary": false,
+          "internal": false,
+          "file": "FlClash-0.8.96-linux-amd64.AppImage",
+          "size": 61789376,
+          "sha256": null,
+          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.AppImage",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.AppImage"
+        }
+      ]
+    },
     {
       "id": "clash-verge",
       "name": "Clash Verge Rev",
@@ -203,240 +369,6 @@
       ]
     },
     {
-      "id": "hiddify",
-      "name": "Hiddify",
-      "tagline": "Cross-platform · simplest",
-      "why": "Free and open source, the most foolproof subscription import. If you're not sure what to install, install this. Note: the repo was renamed from hiddify-next to hiddify-app.",
-      "repo": "hiddify/hiddify-app",
-      "tag": "v4.1.1",
-      "latestTag": "v4.1.2",
-      "os": [
-        "windows",
-        "macos",
-        "linux",
-        "android"
-      ],
-      "files": [
-        {
-          "os": "windows",
-          "label": "Windows x64 installer",
-          "primary": true,
-          "internal": false,
-          "file": "Hiddify-Windows-Setup-x64.exe",
-          "size": 36486310,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Setup-x64.exe",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Setup-x64.exe"
-        },
-        {
-          "os": "windows",
-          "label": "Windows portable (no install)",
-          "primary": false,
-          "internal": false,
-          "file": "Hiddify-Windows-Portable-x64.zip",
-          "size": 117708800,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Portable-x64.zip",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Windows-Portable-x64.zip"
-        },
-        {
-          "os": "macos",
-          "label": "macOS .dmg",
-          "primary": true,
-          "internal": false,
-          "file": "Hiddify-MacOS.dmg",
-          "size": 83485931,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-MacOS.dmg",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-MacOS.dmg"
-        },
-        {
-          "os": "linux",
-          "label": "Linux AppImage",
-          "primary": false,
-          "internal": false,
-          "file": "Hiddify-Linux-x64-AppImage.AppImage",
-          "size": 55220728,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Linux-x64-AppImage.AppImage",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Linux-x64-AppImage.AppImage"
-        },
-        {
-          "os": "linux",
-          "label": "Linux .deb",
-          "primary": false,
-          "internal": false,
-          "file": "Hiddify-Debian-x64.deb",
-          "size": 42466870,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Debian-x64.deb",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Debian-x64.deb"
-        },
-        {
-          "os": "android",
-          "label": "Android arm64 (most phones)",
-          "primary": true,
-          "internal": false,
-          "file": "Hiddify-Android-arm64.apk",
-          "size": 119028082,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-arm64.apk",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-arm64.apk"
-        },
-        {
-          "os": "android",
-          "label": "Android universal (older devices)",
-          "primary": false,
-          "internal": false,
-          "file": "Hiddify-Android-universal.apk",
-          "size": 339558475,
-          "sha256": null,
-          "rel": "hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-universal.apk",
-          "upstream": "https://github.com/hiddify/hiddify-app/releases/download/v4.1.1/Hiddify-Android-universal.apk"
-        }
-      ]
-    },
-    {
-      "id": "v2rayng",
-      "name": "v2rayNG",
-      "tagline": "Android pick",
-      "why": "The most mature Android client, native Xray core, the most complete VLESS + REALITY support.",
-      "repo": "2dust/v2rayNG",
-      "tag": "2.3.5",
-      "latestTag": "2.3.5",
-      "os": [
-        "android"
-      ],
-      "files": [
-        {
-          "os": "android",
-          "label": "arm64-v8a (phones from 2018 on)",
-          "primary": true,
-          "internal": false,
-          "file": "v2rayNG_2.3.5_arm64-v8a.apk",
-          "size": 32539012,
-          "sha256": null,
-          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_arm64-v8a.apk",
-          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_arm64-v8a.apk"
-        },
-        {
-          "os": "android",
-          "label": "armeabi-v7a (older phones)",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayNG_2.3.5_armeabi-v7a.apk",
-          "size": 32931394,
-          "sha256": null,
-          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_armeabi-v7a.apk",
-          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_armeabi-v7a.apk"
-        },
-        {
-          "os": "android",
-          "label": "x86_64 (emulator)",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayNG_2.3.5_x86_64.apk",
-          "size": 33512695,
-          "sha256": null,
-          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_x86_64.apk",
-          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5_x86_64.apk"
-        },
-        {
-          "os": "android",
-          "label": "F-Droid build arm64",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayNG_2.3.5-fdroid_arm64-v8a.apk",
-          "size": 32539108,
-          "sha256": null,
-          "rel": "2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5-fdroid_arm64-v8a.apk",
-          "upstream": "https://github.com/2dust/v2rayNG/releases/download/2.3.5/v2rayNG_2.3.5-fdroid_arm64-v8a.apk"
-        }
-      ]
-    },
-    {
-      "id": "v2rayn",
-      "name": "v2rayN",
-      "tagline": "Windows veteran",
-      "why": "The most-used client on Windows, official Xray core. Note: recent versions are cross-platform, so files are named v2rayN-platform-arch.",
-      "repo": "2dust/v2rayN",
-      "tag": "7.24.8",
-      "latestTag": "7.24.8",
-      "os": [
-        "windows",
-        "macos",
-        "linux"
-      ],
-      "files": [
-        {
-          "os": "windows",
-          "label": "Windows x64 desktop",
-          "primary": true,
-          "internal": false,
-          "file": "v2rayN-windows-64-desktop.zip",
-          "size": 131912198,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64-desktop.zip",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64-desktop.zip"
-        },
-        {
-          "os": "windows",
-          "label": "Windows x64 standard",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayN-windows-64.zip",
-          "size": 155926547,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64.zip",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-64.zip"
-        },
-        {
-          "os": "windows",
-          "label": "Windows 32-bit",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayN-windows-86-desktop.zip",
-          "size": 133435827,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-86-desktop.zip",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-windows-86-desktop.zip"
-        },
-        {
-          "os": "macos",
-          "label": "macOS Apple silicon",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayN-macos-arm64.dmg",
-          "size": 123994193,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-arm64.dmg",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-arm64.dmg"
-        },
-        {
-          "os": "macos",
-          "label": "macOS Intel",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayN-macos-64.dmg",
-          "size": 130555510,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-64.dmg",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-macos-64.dmg"
-        },
-        {
-          "os": "linux",
-          "label": "Linux .deb",
-          "primary": false,
-          "internal": false,
-          "file": "v2rayN-linux-64.deb",
-          "size": 79798012,
-          "sha256": null,
-          "rel": "2dust/v2rayN/releases/download/7.24.8/v2rayN-linux-64.deb",
-          "upstream": "https://github.com/2dust/v2rayN/releases/download/7.24.8/v2rayN-linux-64.deb"
-        }
-      ]
-    },
-    {
       "id": "clash-party",
       "name": "Clash Party",
       "tagline": "formerly mihomo-party",
@@ -457,7 +389,7 @@
           "internal": false,
           "file": "clash-party-win7-2.0.2-x64-setup.exe",
           "size": 152925625,
-          "sha256": "d850b658c52d7b9d25debc25e511f0d0cbcc12cdfb3ec0e14072be56e7948272",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe"
         },
@@ -468,7 +400,7 @@
           "internal": false,
           "file": "clash-party-win7-2.0.2-ia32-setup.exe",
           "size": 146756009,
-          "sha256": "de7e5d83536d27209aa9c3f46ac9c78a8bdc8f83dd59f1d4fe6021daa2656edd",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe"
         },
@@ -479,7 +411,7 @@
           "internal": false,
           "file": "clash-party-windows-2.0.2-x64-setup.exe",
           "size": 183658985,
-          "sha256": "d1cb83f621a7ce530ab1fe24cfee92e7646b8244a43c65ad7a5eb03563896cae",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe"
         },
@@ -490,7 +422,7 @@
           "internal": false,
           "file": "clash-party-macos-2.0.2-arm64.pkg",
           "size": 229845688,
-          "sha256": "438c65bd5cdd8e0fda1fb858bee4b1de4ee7c05f031047a6a597109734edf62b",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg"
         },
@@ -501,7 +433,7 @@
           "internal": false,
           "file": "clash-party-macos-2.0.2-x64.pkg",
           "size": 244803135,
-          "sha256": "3e7a54146f0a740828103a9cb4103788813b6b91a8bbf26135485d74fe4e1f42",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg"
         },
@@ -512,7 +444,7 @@
           "internal": false,
           "file": "clash-party-linux-2.0.2-amd64.deb",
           "size": 189303364,
-          "sha256": "72294237e75d66db70f97bdd222eb7a60f69f101eadb2672646462d8b67f2550",
+          "sha256": null,
           "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb",
           "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb"
         }

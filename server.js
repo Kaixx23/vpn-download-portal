@@ -1,16 +1,6 @@
 /**
  * server.js — zero-dependency Node 18+ server.
- *
- *   1. serves the portal (static/)
- *   2. /m/<owner>/<repo>/releases/download/<tag>/<file>
- *        mirrors the installer through YOUR domain, so a client in China
- *        never has to reach github.com at all.
- *
- * MODE=mirror  (default)  stream the bytes through this server. Use on a VPS
- *                         with cheap egress — this is the mode that actually
- *                         survives the GFW.
- * MODE=redirect 307 the client to GitHub. Use on Render/Vercel free tiers so
- *                         you don't burn bandwidth quota.
+ * Patched to support both original static/ layout and flat root layout.
  */
 import http from "node:http";
 import fs from "node:fs";
@@ -20,7 +10,10 @@ import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const STATIC_DIR = path.join(here, "static");
+let STATIC_DIR = path.join(here, "static");
+if (!fs.existsSync(STATIC_DIR)) {
+  STATIC_DIR = here; // flat layout
+}
 const PORT = Number(process.env.PORT || 3000);
 const MODE = process.env.MODE || "mirror";
 const TRUSTED_HOSTS = new Set([
@@ -43,7 +36,6 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
 };
 
-// Only allow paths that look like a GitHub release asset. No traversal.
 const ASSET_RE =
   /^\/m\/([A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)\/releases\/download\/([^/]+)\/(.+)$/;
 
@@ -59,7 +51,11 @@ function safeJoin(base, target) {
 
 async function serveStatic(req, res, pathname) {
   let rel = pathname === "/" ? "index.html" : pathname.slice(1);
-  const file = safeJoin(STATIC_DIR, rel);
+  // vendor/ -> root for flat layout (index.html imports /vendor/qrcode.mjs)
+  if (rel.startsWith("vendor/")) {
+    rel = rel.replace(/^vendor\//, "");
+  }
+  let file = safeJoin(STATIC_DIR, rel);
   if (!file) return send(res, 403, "Forbidden");
   try {
     const st = await fsp.stat(file);
@@ -76,12 +72,24 @@ async function serveStatic(req, res, pathname) {
     res.writeHead(200, { ...headers, "content-length": st.size });
     fs.createReadStream(file).pipe(res);
   } catch {
-    // Any unknown path falls back to the portal (client-side routing).
-    return serveStatic(req, res, "/index.html");
+    // fallback to index.html for SPA-like behavior
+    if (pathname !== "/index.html" && pathname !== "/") {
+      const idx = safeJoin(STATIC_DIR, "index.html");
+      try {
+        const st = await fsp.stat(idx);
+        res.writeHead(200, {
+          "content-type": MIME[".html"],
+          "cache-control": "no-cache",
+          "content-length": st.size,
+        });
+        fs.createReadStream(idx).pipe(res);
+        return;
+      } catch {}
+    }
+    return send(res, 404, "Not found");
   }
 }
 
-/** Resolve a github.com release URL, following redirects, into {url, length}. */
 async function resolveUpstream(upstream, range) {
   let url = upstream;
   for (let i = 0; i < 6; i++) {
@@ -94,7 +102,7 @@ async function resolveUpstream(upstream, range) {
       const loc = res.headers.get("location");
       if (!loc) break;
       const next = new URL(loc, url);
-      if (!TRUSTED_HOSTS.has(next.hostname)) break; // never follow off-list
+      if (!TRUSTED_HOSTS.has(next.hostname)) break;
       url = next.toString();
       continue;
     }
@@ -128,15 +136,13 @@ async function handleMirror(req, res, m) {
   const headers = {
     "content-disposition": disposition,
     "content-type": "application/octet-stream",
-    // Versioned tags are immutable → safe to cache aggressively at any CDN.
     "cache-control": "public, max-age=604800, immutable",
     "x-mirror-mode": "mirror",
     "x-upstream-host": new URL(up.url).hostname,
   };
   if (up.length) headers["content-length"] = up.length;
   if (up.range) headers["content-range"] = up.range;
-  if (req.headers["if-none-match"]) headers["accept-ranges"] = "bytes";
-  else headers["accept-ranges"] = "bytes";
+  headers["accept-ranges"] = "bytes";
 
   if (req.method === "HEAD") {
     res.writeHead(up.status, headers);
@@ -173,18 +179,20 @@ const server = http.createServer(async (req, res) => {
       });
     }
     if (pathname === "/api/manifest") {
-      const file = path.join(STATIC_DIR, "catalog.json");
-      try {
-        const buf = await fsp.readFile(file);
-        return send(res, 200, buf, {
-          "content-type": "application/json; charset=utf-8",
-          "cache-control": "public, max-age=300",
-        });
-      } catch {
-        return send(res, 404, JSON.stringify({ error: "catalog not built" }), {
-          "content-type": "application/json; charset=utf-8",
-        });
+      // try static/catalog.json then root catalog.json
+      const candidates = [path.join(STATIC_DIR, "catalog.json"), path.join(here, "catalog.json")];
+      for (const file of candidates) {
+        try {
+          const buf = await fsp.readFile(file);
+          return send(res, 200, buf, {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "public, max-age=300",
+          });
+        } catch {}
       }
+      return send(res, 404, JSON.stringify({ error: "catalog not built" }), {
+        "content-type": "application/json; charset=utf-8",
+      });
     }
     const m = pathname.match(ASSET_RE);
     if (m) return await handleMirror(req, res, m);
@@ -195,5 +203,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`portal listening on 0.0.0.0:${PORT} (MODE=${MODE})`);
+  console.log(`portal listening on 0.0.0.0:${PORT} (MODE=${MODE}) dir=${STATIC_DIR}`);
 });
