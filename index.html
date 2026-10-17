@@ -449,6 +449,61 @@
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
   }
+
+  /* Admin Board & One-Time Pass Management */
+  .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .admin-btn{
+    display:none;align-items:center;gap:6px;
+    background:linear-gradient(135deg,rgba(37,99,235,.28),rgba(34,211,238,.22));
+    border:1px solid rgba(56,189,248,.48);color:#e0f2fe;border-radius:999px;
+    padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+    box-shadow:0 4px 14px rgba(14,165,233,.25);transition:all .14s ease;
+  }
+  .admin-btn.on{display:inline-flex}
+  .admin-btn:hover{border-color:#67e8f9;color:#fff;transform:translateY(-1px)}
+  .admin-btn svg{width:13px;height:13px;fill:var(--acc2)}
+  .admin-modal{
+    background:var(--panel-solid);border:1px solid rgba(56,189,248,.32);border-radius:22px;
+    padding:24px;max-width:860px;width:100%;max-height:88vh;overflow-y:auto;text-align:left;
+    box-shadow:0 30px 80px rgba(0,0,0,.78),0 1px 0 0 rgba(255,255,255,.1) inset;
+  }
+  .adm-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:16px}
+  .adm-title{font-size:19px;font-weight:800;display:flex;align-items:center;gap:9px;color:#fff}
+  .adm-title svg{width:20px;height:20px;fill:var(--acc2)}
+  .adm-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+  .adm-kpi{background:rgba(9,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+  .adm-kpi .k{font-size:11px;color:var(--dim);text-transform:uppercase;font-weight:700;letter-spacing:.5px}
+  .adm-kpi .v{font-size:20px;font-weight:800;color:#fff;margin-top:2px}
+  .adm-sec{background:rgba(9,14,26,.65);border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:16px}
+  .adm-sec h3{margin:0 0 4px;font-size:15px;font-weight:750;color:#f8fafc;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .adm-sec p{margin:0 0 12px;font-size:12.5px;color:var(--dim)}
+  .adm-form{display:grid;grid-template-columns:1.3fr 1fr 1fr .9fr auto;gap:8px;align-items:end}
+  .adm-field{display:flex;flex-direction:column;gap:4px}
+  .adm-field label{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.4px}
+  .adm-inp,.adm-sel{
+    background:rgba(15,23,42,.95);border:1px solid var(--line);color:var(--txt);
+    border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;min-height:40px;
+  }
+  .adm-chk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#cbd5e1;margin-top:10px;cursor:pointer}
+  .code-list,.log-list{display:grid;gap:8px;max-height:260px;overflow-y:auto;padding-right:2px}
+  .code-row,.log-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    background:rgba(15,23,42,.82);border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-size:12.5px;
+  }
+  .code-pin{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;font-weight:800;
+    color:#67e8f9;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.32);
+    padding:3px 9px;border-radius:7px;letter-spacing:1.2px;
+  }
+  .st-badge{font-size:10.5px;font-weight:750;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px}
+  .st-ok{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.35)}
+  .st-warn{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.35)}
+  .st-bad{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.35)}
+  .st-dl{background:rgba(59,130,246,.18);color:#93c5fd;border:1px solid rgba(59,130,246,.4)}
+  @media (max-width:760px){
+    .adm-kpis{grid-template-columns:repeat(2,1fr)}
+    .adm-form{grid-template-columns:1fr 1fr}
+  }
 </style>
 </head>
 <body class="is-locked">
@@ -493,12 +548,18 @@
   <div class="hero-topbar">
     <div class="status-pill">
       <span class="status-dot"></span>
-      <span>Direct China Mirror Active · No Proxy Required</span>
+      <span id="sessionStatusTxt">Direct China Mirror Active · No Proxy Required</span>
     </div>
-    <button type="button" class="lock-now-btn" id="btnLockPage" title="Lock this page now">
-      <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 5a3 3 0 016 0v3H9V7z"/></svg>
-      Lock Page
-    </button>
+    <div class="top-actions">
+      <button type="button" class="admin-btn" id="btnAdminBoard" title="Open Admin Security & Visitor Console">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3.6v5.4c0 5.5-3.4 10.6-8 12-4.6-1.4-8-6.5-8-12V5.6L12 2zm0 5a3 3 0 100 6 3 3 0 000-6zm0 8c-2.7 0-5 1.3-5.6 3.1a6.9 6.9 0 0011.2 0C17 16.3 14.7 15 12 15z"/></svg>
+        Admin Board
+      </button>
+      <button type="button" class="lock-now-btn" id="btnLockPage" title="Lock this page now">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 5a3 3 0 016 0v3H9V7z"/></svg>
+        Lock Page
+      </button>
+    </div>
   </div>
   <div class="brand">
     <span class="logo"><svg viewBox="0 0 32 32"><path d="M16 4l10 4.5V16c0 6-4.2 10.7-10 11.6C10.2 26.7 6 22 6 16V8.5z" fill="#fff"/></svg></span>
@@ -688,9 +749,99 @@ macOS / Linux:         shasum -a 256 filename</pre>
   </div>
 </div>
 
+<!-- Admin Board Modal (Owner Only) -->
+<div class="ov" id="adminOv">
+  <div class="admin-modal" role="dialog" aria-labelledby="admHeading">
+    <div class="adm-head">
+      <div class="adm-title" id="admHeading">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3.6v5.4c0 5.5-3.4 10.6-8 12-4.6-1.4-8-6.5-8-12V5.6L12 2z"/></svg>
+        <span>Admin Security &amp; Visitor Console</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button type="button" class="btn sm ghost" id="btnCopyPs1">📋 Copy PowerShell Push Script</button>
+        <button type="button" class="btn sm ghost" id="btnRefreshAdmin">Refresh</button>
+        <button type="button" class="btn sm" id="btnCloseAdmin">Close</button>
+      </div>
+    </div>
+    <div id="ps1BoxWrap" style="display:none;margin-bottom:14px;background:rgba(9,14,26,.9);border:1px solid var(--acc2);border-radius:12px;padding:12px">
+      <div style="font-size:12px;color:#67e8f9;font-weight:700;margin-bottom:6px">Copied! Click inside the box below, press Ctrl+A then Ctrl+C, and paste into PowerShell:</div>
+      <textarea id="ps1Text" readonly style="width:100%;height:78px;background:#050811;color:#e2e8f0;border:1px solid var(--line);border-radius:8px;padding:8px;font-family:monospace;font-size:11px"></textarea>
+    </div>
+
+    <div class="adm-kpis">
+      <div class="adm-kpi"><div class="k">Total Unlocks</div><div class="v" id="kpiUnlocks">0</div></div>
+      <div class="adm-kpi"><div class="k">Installer Downloads</div><div class="v" id="kpiDownloads">0</div></div>
+      <div class="adm-kpi"><div class="k">Active Customer PINs</div><div class="v" id="kpiActiveCodes">0</div></div>
+      <div class="adm-kpi"><div class="k">Blocked / Shared</div><div class="v" id="kpiBlocked" style="color:#fca5a5">0</div></div>
+    </div>
+
+    <!-- ONE-TIME CUSTOMER PASS GENERATOR -->
+    <div class="adm-sec">
+      <h3>
+        <span>1. Generate One-Time / Anti-Share Customer PIN</span>
+        <span class="st-badge st-ok">Stops Password Sharing</span>
+      </h3>
+      <p>Keep your Master Admin PIN (<code>200324</code>) private. Give customers a <b>One-Time PIN</b> below — once they unlock and download, the PIN automatically locks so they cannot reuse or share it with others.</p>
+      <form id="admCodeForm" autocomplete="off">
+        <div class="adm-form">
+          <div class="adm-field">
+            <label for="admLabel">Customer Name / Note</label>
+            <input type="text" id="admLabel" class="adm-inp" placeholder="e.g. Alex (iPhone)" required>
+          </div>
+          <div class="adm-field">
+            <label for="admMaxUses">Max Logins Allowed</label>
+            <select id="admMaxUses" class="adm-sel">
+              <option value="1" selected>1 Login Only (One-Time)</option>
+              <option value="2">2 Logins</option>
+              <option value="3">3 Logins</option>
+              <option value="5">5 Logins</option>
+              <option value="0">Unlimited</option>
+            </select>
+          </div>
+          <div class="adm-field">
+            <label for="admExpiry">Auto-Expire After</label>
+            <select id="admExpiry" class="adm-sel">
+              <option value="30">30 Minutes</option>
+              <option value="60" selected>1 Hour</option>
+              <option value="360">6 Hours</option>
+              <option value="1440">24 Hours (1 Day)</option>
+              <option value="10080">7 Days</option>
+              <option value="0">Never Expires</option>
+            </select>
+          </div>
+          <div class="adm-field">
+            <label for="admCustomPin">Custom PIN (Optional)</label>
+            <input type="text" id="admCustomPin" class="adm-inp" placeholder="Auto 6-digit">
+          </div>
+          <button type="submit" class="btn sm" style="min-height:40px">+ Create PIN</button>
+        </div>
+        <label class="adm-chk">
+          <input type="checkbox" id="admLockDevice" checked>
+          <span><b>Lock to First Device (Anti-Sharing):</b> Bind this PIN to the first phone/PC that opens it — blocks friends if shared.</span>
+        </label>
+      </form>
+
+      <div style="margin-top:14px">
+        <div style="font-size:11.5px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px">Customer PINs (Active &amp; Used)</div>
+        <div class="code-list" id="admCodeList"></div>
+      </div>
+    </div>
+
+    <!-- LIVE VISITOR & DOWNLOAD AUDIT LOG -->
+    <div class="adm-sec" style="margin-bottom:0">
+      <h3>
+        <span>2. Who Accessed Your Site (Live Access &amp; Download Log)</span>
+        <button type="button" class="btn sm ghost" id="btnClearLogs" style="min-height:32px;padding:4px 10px">Clear History</button>
+      </h3>
+      <p>Every login, installer download, expired PIN attempt, and blocked password-sharing attempt is recorded below.</p>
+      <div class="log-list" id="admLogList"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script id="inlineCatalog" type="application/json">{"updated":"2026-10-17T15:45:29.952Z","resolver":"releases.atom + expanded_assets (not the rate-limited REST API)","sources":[{"id":"self","label":"This site (Direct)","base":"","mode":"self"},{"id":"ghfast","label":"China Fast CDN 1","base":"https://ghfast.top/","mode":"prefix"},{"id":"ghproxy","label":"China Fast CDN 2","base":"https://gh-proxy.com/","mode":"prefix"},{"id":"ghproxy2","label":"China Fast CDN 3","base":"https://ghproxy.net/","mode":"prefix"},{"id":"gh","label":"GitHub (Official)","base":"https://github.com","mode":"raw"}],"ios":[{"id":"shadowrocket","name":"Shadowrocket","price":"US$2.99","appId":"932747118","updated":"maintained","note":"Top iOS pick. Requires a non-China Apple ID — removed from the China App Store, so a China Apple ID won't find it.","primary":true},{"id":"surge5","name":"Surge 5","price":"free + IAP","appId":"1442620678","updated":"2026-08-11","note":"Most powerful, most actively updated. Complex rule engine — for technical users."},{"id":"stash","name":"Stash","price":"US$5.99","appId":"1596063349","updated":"2026-07-16","note":"Clash ecosystem, the most flexible rules."},{"id":"quantumultx","name":"Quantumult X","price":"paid","appId":"1443988620","updated":"maintained","note":"Long-standing, good REALITY support."},{"id":"loon","name":"Loon","price":"US$4.99","appId":"1373567447","updated":"maintained","note":"Long-standing and stable."},{"id":"karing","name":"Karing","price":"free","appId":"6472431552","updated":"2026-08-12","note":"Free + open source, sing-box core, native REALITY support. Best free option."},{"id":"v2box","name":"V2Box","price":"free","appId":"6446814690","updated":"2026-08-17","note":"Free, simple UI, good for non-technical users."},{"id":"streisand","name":"Streisand","price":"free","appId":"6450534064","updated":"2026-07-14","note":"Free alternative."}],"apps":[{"id":"clash-meta","name":"Clash Meta for Android","tagline":"Recommended · Android pick","why":"Top Android pick · Mihomo core (Clash Meta), full VLESS + REALITY, Hysteria, TUIC, best compatibility with your VPN. Most powerful and actively maintained Android client.","repo":"MetaCubeX/ClashMetaForAndroid","tag":"v2.11.35","latestTag":"Prerelease-alpha","os":["android"],"files":[{"os":"android","label":"Android arm64 (most phones)","primary":true,"internal":false,"file":"cmfa-2.11.35-meta-arm64-v8a-release.apk","size":48780036,"sha256":"af7f05d8801798a8e75de682e5f67070138becb8623b7a341c3e5cd042a3753d","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk"},{"os":"android","label":"Android armv7 (older phones)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-armeabi-v7a-release.apk","size":48742314,"sha256":"11c249a17ade5d714d63a8c8c3bb02a0371790467d0b1f5c8747671a36adbb6c","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk"},{"os":"android","label":"Android universal (all devices)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-universal-release.apk","size":124293900,"sha256":"e53244936d150060d1d6a2d30f8c6fd3b59de315c3bb5f1d74874ac4a7331249","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk"},{"os":"android","label":"Android x86_64 (emulator)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-x86_64-release.apk","size":50700611,"sha256":"a722aef0988f3ac90ab2b04755bb5a3f69ddd68fc38744c1ab04d2543d45af45","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk"}]},{"id":"flclash","name":"FlClash","tagline":"Clash Meta · multi-platform","why":"Modern UI based on Clash Meta (mihomo) core, supports VLESS + REALITY + Hysteria, easy subscription import, works on Android and desktop. Great alternative to Clash Meta.","repo":"chen08209/FlClash","tag":"v0.9.1","latestTag":"v0.9.1","os":["android","windows","macos","linux"],"files":[{"os":"android","label":"Android arm64 (most phones)","primary":true,"internal":false,"file":"FlClash-0.9.1-android-arm64-v8a.apk","size":60894491,"sha256":"7a8aeedbe3c376b724a1f76521f5322df1da4bb8d8e09833a2fa804b2913ecc2","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk"},{"os":"android","label":"Android armv7 (older phones)","primary":false,"internal":false,"file":"FlClash-0.9.1-android-armeabi-v7a.apk","size":60876375,"sha256":"c55d8c4d88a3d848cd58925126275d2eece84bd7ecab79e11530b5871dec2509","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk"},{"os":"android","label":"Android x86_64 (emulator)","primary":false,"internal":false,"file":"FlClash-0.9.1-android-x86_64.apk","size":63403453,"sha256":"a03bb141b5163f7813fd11b9130ed3811cf09c03ac50f85aef292f8ad06e7a05","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk"},{"os":"windows","label":"Windows x64 installer","primary":true,"internal":false,"file":"FlClash-0.9.1-windows-amd64-setup.exe","size":43219493,"sha256":"6d3008315bc87a96064329935eac62ae322b2f6cf7c725170a94d0798f657cd4","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe"},{"os":"windows","label":"Windows x64 portable","primary":false,"internal":false,"file":"FlClash-0.9.1-windows-amd64.zip","size":68669175,"sha256":"f943ceb96fdf0bce8ddf080292f6009631b3be29250b7438701b7e8162840f21","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip"},{"os":"macos","label":"macOS Apple silicon","primary":true,"internal":false,"file":"FlClash-0.9.1-macos-arm64.dmg","size":59133289,"sha256":"ef904fb991a9ed5f0deaedb0a66f4a45dccfceeb45225d602fad3f2246aa9b99","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg"},{"os":"macos","label":"macOS Intel","primary":false,"internal":false,"file":"FlClash-0.9.1-macos-amd64.dmg","size":62984732,"sha256":"01bf8bc434a7f035fe2c27736f061c3cb7721e63771000277711840dde0d5219","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg"},{"os":"linux","label":"Linux .deb (Ubuntu/Debian)","primary":true,"internal":false,"file":"FlClash-0.9.1-linux-amd64.deb","size":48045408,"sha256":"33efbb0ccf747d14294291ae1f0db950dae34f453cb51d4374e6cb6a17e22917","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb"},{"os":"linux","label":"Linux AppImage","primary":false,"internal":false,"file":"FlClash-0.9.1-linux-amd64.AppImage","size":69715136,"sha256":"2b1325191dde365e6036ef41aac6f443ae5a15dc69fac61dc4d35dd9729f90a3","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage"}]},{"id":"clash-verge","name":"Clash Verge Rev","tagline":"Recommended · desktop pick","why":"mihomo core, full VLESS + REALITY support, the friendliest UI, one-click subscription import.","repo":"clash-verge-rev/clash-verge-rev","tag":"v2.5.8","latestTag":"v2.5.8","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows x64 installer","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_x64-setup.exe","size":60230483,"sha256":"821c0f5957f84c8f7d14532044840e8280d708af24a6a143db360b49bd1e7302","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe"},{"os":"windows","label":"Windows ARM64","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_arm64-setup.exe","size":53952182,"sha256":"077efab7874a6be7c48630d19c941ef679fa265f79c243f9d20ce5878eb5a943","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe"},{"os":"windows","label":"Pre-Win10 / no WebView2","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe","size":250400964,"sha256":"78d8cb9fdfc1140c7846314848d09db7a39e46af68351876ea7357db922f39fe","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe"},{"os":"macos","label":"macOS Apple silicon (M1–M4)","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_aarch64.dmg","size":81825361,"sha256":"1f7c3a73970f103fc3cb9944744772fa1540160f05911e033ffc57f7c9f860ec","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg"},{"os":"macos","label":"macOS Intel","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_x64.dmg","size":87523387,"sha256":"8cdf7a01a1c548a081339aff21b2599d60f67730d05485e90831f4bbdbf3b093","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg"},{"os":"linux","label":"Linux .deb (Ubuntu/Debian)","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_amd64.deb","size":104179124,"sha256":"ceeb7578c6f030b33ddf6346486db24013cf4557cc340de5f312f98a924a8546","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb"},{"os":"linux","label":"Linux .rpm (Fedora/openSUSE)","primary":false,"internal":false,"file":"Clash.Verge-2.5.8-1.x86_64.rpm","size":104176465,"sha256":"ad378ea9fb12ebae49500fcddb0435fd67abef79d828b654368e0f67b5785c2e","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm"}]},{"id":"clash-party","name":"Clash Party","tagline":"formerly mihomo-party","why":"mihomo-party was renamed Clash Party. Bundles its own core and ships a Windows 7 build — use it for customers on old machines.","repo":"mihomo-party-org/clash-party","tag":"v2.0.3","latestTag":"v2.0.3","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows 7 x64 (old machines)","primary":true,"internal":false,"file":"clash-party-win7-2.0.3-x64-setup.exe","size":170405716,"sha256":"190474e08cd8a0a6db180be745fa6ad420aecc3c5468dc2ffd55fe869a4072f5","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe"},{"os":"windows","label":"Windows 7 32-bit","primary":false,"internal":false,"file":"clash-party-win7-2.0.3-ia32-setup.exe","size":162854414,"sha256":"dc25d336f2bfd028495749fa10fa0e0c6ec62b9219e2362fb72a354b7db73101","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe"},{"os":"windows","label":"Windows x64 (Win10/11)","primary":false,"internal":false,"file":"clash-party-windows-2.0.3-x64-setup.exe","size":208253928,"sha256":"bcb3f642124aa85574d47c5242c15803d0eefbaf0240f545ded31c70a1e0c3db","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe"},{"os":"macos","label":"macOS Apple silicon .pkg","primary":false,"internal":false,"file":"clash-party-macos-2.0.3-arm64.pkg","size":244121821,"sha256":"e4699bb29ec60810553c9358b1744538476251d78a978119ce2702a040210545","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg"},{"os":"macos","label":"macOS Intel .pkg","primary":false,"internal":false,"file":"clash-party-macos-2.0.3-x64.pkg","size":262351524,"sha256":"3233641f78cc0424ad54606946ce442cb2c4c823d491f5bc96d16f87f898cc0a","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg"},{"os":"linux","label":"Linux .deb","primary":false,"internal":false,"file":"clash-party-linux-2.0.3-amd64.deb","size":201959128,"sha256":"a45ecdecba85b6f3662851a6013d31874ac5e0f91df855dc68b39aec4b2c463d","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb"}]},{"id":"nekobox","name":"NekoBox for Android","tagline":"Android alternative","why":"Dual sing-box/Xray cores, imports your exported yaml directly. Note: the desktop NekoRay repo is archived/unmaintained, but the Android build is still updated.","repo":"MatsuriDayo/NekoBoxForAndroid","tag":"1.4.2","latestTag":"1.4.2","os":["android"],"files":[{"os":"android","label":"arm64-v8a","primary":true,"internal":false,"file":"NekoBox-1.4.2-arm64-v8a.apk","size":15252519,"sha256":"d01e76feeb05e4701f3ae382cb71c0a3ebb77039005e5893f8817e1051f8ac28","rel":"MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk","upstream":"https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk"},{"os":"android","label":"armeabi-v7a (older phones)","primary":false,"internal":false,"file":"NekoBox-1.4.2-armeabi-v7a.apk","size":15509280,"sha256":"e21f4b1c09696e0fd8ff594db42fcec41d1ad1254b356e08c2fa6e9c5bfed10b","rel":"MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk","upstream":"https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk"}]},{"id":"throne","name":"Throne","tagline":"sing-box desktop","why":"The community successor after NekoRay went unmaintained. Cross-platform, good REALITY support.","repo":"throneproj/Throne","tag":"1.3.2","latestTag":"1.4.0-beta.2","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows universal installer","primary":true,"internal":false,"file":"Throne-1.3.2-windows-universal-installer.exe","size":147662477,"sha256":"4df6a09eabc19a797b7e94b49790c63e3e5a90749898b5749f496d2a44e9c0c7","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe"},{"os":"windows","label":"Windows 7/8 64-bit","primary":false,"internal":false,"file":"Throne-1.3.2-windowslegacy64.zip","size":47189687,"sha256":"c445556933484caacc5dd7e8b89bcb96b1b455d151f4654c91b4074393412b07","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip"},{"os":"macos","label":"macOS Apple silicon","primary":false,"internal":false,"file":"Throne-1.3.2-macos-arm64.zip","size":64125334,"sha256":"c5371633f17e46d18d999206a79bafe4ec1b20e03acf51171261f3084b702b16","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip"},{"os":"linux","label":"Linux amd64","primary":false,"internal":false,"file":"Throne-1.3.2-linux-amd64.zip","size":76468899,"sha256":"e8af3be3e1bf54884539e4c631965af339acd703d8c69ea732575be9a71dd8a8","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip"}]},{"id":"xray-core","name":"Xray-core","tagline":"Server / advanced users","why":"The server-side core itself, or for customers who run their own node. Ordinary customers don't need this.","repo":"XTLS/Xray-core","tag":"v26.10.17","latestTag":"v26.10.17","os":["windows","macos","linux"],"files":[{"os":"linux","label":"Linux amd64","primary":true,"internal":false,"file":"Xray-linux-64.zip","size":20698929,"sha256":"ecdd54eccd24c4c21a8f00968e7dbf7f5996da92383d2321170b560dc4a95158","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip"},{"os":"linux","label":"Linux arm64","primary":false,"internal":false,"file":"Xray-linux-arm64-v8a.zip","size":19192144,"sha256":"4ebdad86048fa499e65334f88a120b1ed17e662f1c222afd3514afdf8820cdb1","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip"},{"os":"macos","label":"macOS arm64","primary":false,"internal":false,"file":"Xray-macos-arm64-v8a.zip","size":19274058,"sha256":"57531c66df375da671f66cad1443f63e90410b83d09baf226e2f26f2748aae0f","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip"},{"os":"windows","label":"Windows 64-bit","primary":false,"internal":false,"file":"Xray-windows-64.zip","size":20633384,"sha256":"c10a532a9271964f2aa2f4b4c0757605ff529222cb1d5d7ab88f8ecc52e67fb0","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip"},{"os":"windows","label":"Windows 7 64-bit","primary":false,"internal":false,"file":"Xray-win7-64.zip","size":20633486,"sha256":"38373b1ccc6dd36f1262cdccc98cb83e10c8dc62577b1d8d8fa8b595962de4c0","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip"},{"os":"linux","label":"Checksum file Xray-linux-64.zip.dgst","primary":false,"internal":true,"file":"Xray-linux-64.zip.dgst","size":299,"sha256":"40cbf01ab0bbd9c636f135478541320d9478d7b27be653541a1cc960779f3f6c","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst"}]}]}</script>
+<script id="inlineCatalog" type="application/json">{"updated":"2026-10-17T15:45:29.952Z","resolver":"releases.atom + expanded_assets (not the rate-limited REST API)","sources":[{"id":"self","label":"This site (Direct)","base":"","mode":"self"},{"id":"ghproxy","label":"China Fast CDN 1","base":"https://gh-proxy.com/","mode":"prefix"},{"id":"ghproxy2","label":"China Fast CDN 2","base":"https://ghproxy.net/","mode":"prefix"},{"id":"ghfast","label":"China Fast CDN 3","base":"https://ghfast.top/","mode":"prefix"},{"id":"gh","label":"GitHub (Official)","base":"https://github.com","mode":"raw"}],"ios":[{"id":"shadowrocket","name":"Shadowrocket","price":"US$2.99","appId":"932747118","updated":"maintained","note":"Top iOS pick. Requires a non-China Apple ID — removed from the China App Store, so a China Apple ID won't find it.","primary":true},{"id":"surge5","name":"Surge 5","price":"free + IAP","appId":"1442620678","updated":"2026-08-11","note":"Most powerful, most actively updated. Complex rule engine — for technical users."},{"id":"stash","name":"Stash","price":"US$5.99","appId":"1596063349","updated":"2026-07-16","note":"Clash ecosystem, the most flexible rules."},{"id":"quantumultx","name":"Quantumult X","price":"paid","appId":"1443988620","updated":"maintained","note":"Long-standing, good REALITY support."},{"id":"loon","name":"Loon","price":"US$4.99","appId":"1373567447","updated":"maintained","note":"Long-standing and stable."},{"id":"karing","name":"Karing","price":"free","appId":"6472431552","updated":"2026-08-12","note":"Free + open source, sing-box core, native REALITY support. Best free option."},{"id":"v2box","name":"V2Box","price":"free","appId":"6446814690","updated":"2026-08-17","note":"Free, simple UI, good for non-technical users."},{"id":"streisand","name":"Streisand","price":"free","appId":"6450534064","updated":"2026-07-14","note":"Free alternative."}],"apps":[{"id":"clash-meta","name":"Clash Meta for Android","tagline":"Recommended · Android pick","why":"Top Android pick · Mihomo core (Clash Meta), full VLESS + REALITY, Hysteria, TUIC, best compatibility with your VPN. Most powerful and actively maintained Android client.","repo":"MetaCubeX/ClashMetaForAndroid","tag":"v2.11.35","latestTag":"Prerelease-alpha","os":["android"],"files":[{"os":"android","label":"Android arm64 (most phones)","primary":true,"internal":false,"file":"cmfa-2.11.35-meta-arm64-v8a-release.apk","size":48780036,"sha256":"af7f05d8801798a8e75de682e5f67070138becb8623b7a341c3e5cd042a3753d","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk"},{"os":"android","label":"Android armv7 (older phones)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-armeabi-v7a-release.apk","size":48742314,"sha256":"11c249a17ade5d714d63a8c8c3bb02a0371790467d0b1f5c8747671a36adbb6c","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk"},{"os":"android","label":"Android universal (all devices)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-universal-release.apk","size":124293900,"sha256":"e53244936d150060d1d6a2d30f8c6fd3b59de315c3bb5f1d74874ac4a7331249","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk"},{"os":"android","label":"Android x86_64 (emulator)","primary":false,"internal":false,"file":"cmfa-2.11.35-meta-x86_64-release.apk","size":50700611,"sha256":"a722aef0988f3ac90ab2b04755bb5a3f69ddd68fc38744c1ab04d2543d45af45","rel":"MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk","upstream":"https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk"}]},{"id":"flclash","name":"FlClash","tagline":"Clash Meta · multi-platform","why":"Modern UI based on Clash Meta (mihomo) core, supports VLESS + REALITY + Hysteria, easy subscription import, works on Android and desktop. Great alternative to Clash Meta.","repo":"chen08209/FlClash","tag":"v0.9.1","latestTag":"v0.9.1","os":["android","windows","macos","linux"],"files":[{"os":"android","label":"Android arm64 (most phones)","primary":true,"internal":false,"file":"FlClash-0.9.1-android-arm64-v8a.apk","size":60894491,"sha256":"7a8aeedbe3c376b724a1f76521f5322df1da4bb8d8e09833a2fa804b2913ecc2","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk"},{"os":"android","label":"Android armv7 (older phones)","primary":false,"internal":false,"file":"FlClash-0.9.1-android-armeabi-v7a.apk","size":60876375,"sha256":"c55d8c4d88a3d848cd58925126275d2eece84bd7ecab79e11530b5871dec2509","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk"},{"os":"android","label":"Android x86_64 (emulator)","primary":false,"internal":false,"file":"FlClash-0.9.1-android-x86_64.apk","size":63403453,"sha256":"a03bb141b5163f7813fd11b9130ed3811cf09c03ac50f85aef292f8ad06e7a05","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk"},{"os":"windows","label":"Windows x64 installer","primary":true,"internal":false,"file":"FlClash-0.9.1-windows-amd64-setup.exe","size":43219493,"sha256":"6d3008315bc87a96064329935eac62ae322b2f6cf7c725170a94d0798f657cd4","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe"},{"os":"windows","label":"Windows x64 portable","primary":false,"internal":false,"file":"FlClash-0.9.1-windows-amd64.zip","size":68669175,"sha256":"f943ceb96fdf0bce8ddf080292f6009631b3be29250b7438701b7e8162840f21","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip"},{"os":"macos","label":"macOS Apple silicon","primary":true,"internal":false,"file":"FlClash-0.9.1-macos-arm64.dmg","size":59133289,"sha256":"ef904fb991a9ed5f0deaedb0a66f4a45dccfceeb45225d602fad3f2246aa9b99","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg"},{"os":"macos","label":"macOS Intel","primary":false,"internal":false,"file":"FlClash-0.9.1-macos-amd64.dmg","size":62984732,"sha256":"01bf8bc434a7f035fe2c27736f061c3cb7721e63771000277711840dde0d5219","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg"},{"os":"linux","label":"Linux .deb (Ubuntu/Debian)","primary":true,"internal":false,"file":"FlClash-0.9.1-linux-amd64.deb","size":48045408,"sha256":"33efbb0ccf747d14294291ae1f0db950dae34f453cb51d4374e6cb6a17e22917","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb"},{"os":"linux","label":"Linux AppImage","primary":false,"internal":false,"file":"FlClash-0.9.1-linux-amd64.AppImage","size":69715136,"sha256":"2b1325191dde365e6036ef41aac6f443ae5a15dc69fac61dc4d35dd9729f90a3","rel":"chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage","upstream":"https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage"}]},{"id":"clash-verge","name":"Clash Verge Rev","tagline":"Recommended · desktop pick","why":"mihomo core, full VLESS + REALITY support, the friendliest UI, one-click subscription import.","repo":"clash-verge-rev/clash-verge-rev","tag":"v2.5.8","latestTag":"v2.5.8","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows x64 installer","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_x64-setup.exe","size":60230483,"sha256":"821c0f5957f84c8f7d14532044840e8280d708af24a6a143db360b49bd1e7302","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe"},{"os":"windows","label":"Windows ARM64","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_arm64-setup.exe","size":53952182,"sha256":"077efab7874a6be7c48630d19c941ef679fa265f79c243f9d20ce5878eb5a943","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe"},{"os":"windows","label":"Pre-Win10 / no WebView2","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe","size":250400964,"sha256":"78d8cb9fdfc1140c7846314848d09db7a39e46af68351876ea7357db922f39fe","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe"},{"os":"macos","label":"macOS Apple silicon (M1–M4)","primary":false,"internal":false,"file":"Clash.Verge_2.5.8_aarch64.dmg","size":81825361,"sha256":"1f7c3a73970f103fc3cb9944744772fa1540160f05911e033ffc57f7c9f860ec","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg"},{"os":"macos","label":"macOS Intel","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_x64.dmg","size":87523387,"sha256":"8cdf7a01a1c548a081339aff21b2599d60f67730d05485e90831f4bbdbf3b093","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg"},{"os":"linux","label":"Linux .deb (Ubuntu/Debian)","primary":true,"internal":false,"file":"Clash.Verge_2.5.8_amd64.deb","size":104179124,"sha256":"ceeb7578c6f030b33ddf6346486db24013cf4557cc340de5f312f98a924a8546","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb"},{"os":"linux","label":"Linux .rpm (Fedora/openSUSE)","primary":false,"internal":false,"file":"Clash.Verge-2.5.8-1.x86_64.rpm","size":104176465,"sha256":"ad378ea9fb12ebae49500fcddb0435fd67abef79d828b654368e0f67b5785c2e","rel":"clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm","upstream":"https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm"}]},{"id":"clash-party","name":"Clash Party","tagline":"formerly mihomo-party","why":"mihomo-party was renamed Clash Party. Bundles its own core and ships a Windows 7 build — use it for customers on old machines.","repo":"mihomo-party-org/clash-party","tag":"v2.0.3","latestTag":"v2.0.3","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows 7 x64 (old machines)","primary":true,"internal":false,"file":"clash-party-win7-2.0.3-x64-setup.exe","size":170405716,"sha256":"190474e08cd8a0a6db180be745fa6ad420aecc3c5468dc2ffd55fe869a4072f5","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe"},{"os":"windows","label":"Windows 7 32-bit","primary":false,"internal":false,"file":"clash-party-win7-2.0.3-ia32-setup.exe","size":162854414,"sha256":"dc25d336f2bfd028495749fa10fa0e0c6ec62b9219e2362fb72a354b7db73101","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe"},{"os":"windows","label":"Windows x64 (Win10/11)","primary":false,"internal":false,"file":"clash-party-windows-2.0.3-x64-setup.exe","size":208253928,"sha256":"bcb3f642124aa85574d47c5242c15803d0eefbaf0240f545ded31c70a1e0c3db","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe"},{"os":"macos","label":"macOS Apple silicon .pkg","primary":false,"internal":false,"file":"clash-party-macos-2.0.3-arm64.pkg","size":244121821,"sha256":"e4699bb29ec60810553c9358b1744538476251d78a978119ce2702a040210545","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg"},{"os":"macos","label":"macOS Intel .pkg","primary":false,"internal":false,"file":"clash-party-macos-2.0.3-x64.pkg","size":262351524,"sha256":"3233641f78cc0424ad54606946ce442cb2c4c823d491f5bc96d16f87f898cc0a","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg"},{"os":"linux","label":"Linux .deb","primary":false,"internal":false,"file":"clash-party-linux-2.0.3-amd64.deb","size":201959128,"sha256":"a45ecdecba85b6f3662851a6013d31874ac5e0f91df855dc68b39aec4b2c463d","rel":"mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb","upstream":"https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb"}]},{"id":"nekobox","name":"NekoBox for Android","tagline":"Android alternative","why":"Dual sing-box/Xray cores, imports your exported yaml directly. Note: the desktop NekoRay repo is archived/unmaintained, but the Android build is still updated.","repo":"MatsuriDayo/NekoBoxForAndroid","tag":"1.4.2","latestTag":"1.4.2","os":["android"],"files":[{"os":"android","label":"arm64-v8a","primary":true,"internal":false,"file":"NekoBox-1.4.2-arm64-v8a.apk","size":15252519,"sha256":"d01e76feeb05e4701f3ae382cb71c0a3ebb77039005e5893f8817e1051f8ac28","rel":"MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk","upstream":"https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk"},{"os":"android","label":"armeabi-v7a (older phones)","primary":false,"internal":false,"file":"NekoBox-1.4.2-armeabi-v7a.apk","size":15509280,"sha256":"e21f4b1c09696e0fd8ff594db42fcec41d1ad1254b356e08c2fa6e9c5bfed10b","rel":"MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk","upstream":"https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk"}]},{"id":"throne","name":"Throne","tagline":"sing-box desktop","why":"The community successor after NekoRay went unmaintained. Cross-platform, good REALITY support.","repo":"throneproj/Throne","tag":"1.3.2","latestTag":"1.4.0-beta.2","os":["windows","macos","linux"],"files":[{"os":"windows","label":"Windows universal installer","primary":true,"internal":false,"file":"Throne-1.3.2-windows-universal-installer.exe","size":147662477,"sha256":"4df6a09eabc19a797b7e94b49790c63e3e5a90749898b5749f496d2a44e9c0c7","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe"},{"os":"windows","label":"Windows 7/8 64-bit","primary":false,"internal":false,"file":"Throne-1.3.2-windowslegacy64.zip","size":47189687,"sha256":"c445556933484caacc5dd7e8b89bcb96b1b455d151f4654c91b4074393412b07","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip"},{"os":"macos","label":"macOS Apple silicon","primary":false,"internal":false,"file":"Throne-1.3.2-macos-arm64.zip","size":64125334,"sha256":"c5371633f17e46d18d999206a79bafe4ec1b20e03acf51171261f3084b702b16","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip"},{"os":"linux","label":"Linux amd64","primary":false,"internal":false,"file":"Throne-1.3.2-linux-amd64.zip","size":76468899,"sha256":"e8af3be3e1bf54884539e4c631965af339acd703d8c69ea732575be9a71dd8a8","rel":"throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip","upstream":"https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip"}]},{"id":"xray-core","name":"Xray-core","tagline":"Server / advanced users","why":"The server-side core itself, or for customers who run their own node. Ordinary customers don't need this.","repo":"XTLS/Xray-core","tag":"v26.10.17","latestTag":"v26.10.17","os":["windows","macos","linux"],"files":[{"os":"linux","label":"Linux amd64","primary":true,"internal":false,"file":"Xray-linux-64.zip","size":20698929,"sha256":"ecdd54eccd24c4c21a8f00968e7dbf7f5996da92383d2321170b560dc4a95158","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip"},{"os":"linux","label":"Linux arm64","primary":false,"internal":false,"file":"Xray-linux-arm64-v8a.zip","size":19192144,"sha256":"4ebdad86048fa499e65334f88a120b1ed17e662f1c222afd3514afdf8820cdb1","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip"},{"os":"macos","label":"macOS arm64","primary":false,"internal":false,"file":"Xray-macos-arm64-v8a.zip","size":19274058,"sha256":"57531c66df375da671f66cad1443f63e90410b83d09baf226e2f26f2748aae0f","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip"},{"os":"windows","label":"Windows 64-bit","primary":false,"internal":false,"file":"Xray-windows-64.zip","size":20633384,"sha256":"c10a532a9271964f2aa2f4b4c0757605ff529222cb1d5d7ab88f8ecc52e67fb0","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip"},{"os":"windows","label":"Windows 7 64-bit","primary":false,"internal":false,"file":"Xray-win7-64.zip","size":20633486,"sha256":"38373b1ccc6dd36f1262cdccc98cb83e10c8dc62577b1d8d8fa8b595962de4c0","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip"},{"os":"linux","label":"Checksum file Xray-linux-64.zip.dgst","primary":false,"internal":true,"file":"Xray-linux-64.zip.dgst","size":299,"sha256":"40cbf01ab0bbd9c636f135478541320d9478d7b27be653541a1cc960779f3f6c","rel":"XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst","upstream":"https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst"}]}]}</script>
 
 <script type="module">
 // Lazy QR loader - loads /vendor/qrcode.mjs (or /qrcode.mjs) only when a QR is opened,
@@ -741,15 +892,101 @@ const lockCard = $('#lockCard');
 const lockToggle = $('#lockToggle');
 const eyeIcon = $('#eyeIcon');
 const btnLockPage = $('#btnLockPage');
+const btnAdminBoard = $('#btnAdminBoard');
+const adminOv = $('#adminOv');
+const sessionStatusTxt = $('#sessionStatusTxt');
 
 const EYE_OPEN = '<path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 110-8 4 4 0 010 8zm0-6a2 2 0 100 4 2 2 0 000-4z"/>';
 const EYE_CLOSED = '<path d="M2.3 3.7L1 5l3.2 3.2C2.4 9.8 1.5 12 1.5 12s3.2 7 10.5 7c2.1 0 3.9-.6 5.4-1.5l3.3 3.3 1.3-1.3L2.3 3.7zM12 16a4 4 0 01-4-4c0-.6.1-1.1.4-1.6l1.5 1.5a2 2 0 002.2 2.2l1.5 1.5c-.5.3-1 .4-1.6.4zm0-11c-1.8 0-3.4.5-4.8 1.2l2.2 2.2c.8-.3 1.7-.4 2.6-.4 4.8 0 7.7 4 7.7 4s-.9 1.6-2.6 3l1.5 1.5c2-1.8 3.1-4.5 3.1-4.5S19 5 12 5z"/>';
+
+// Device fingerprint ID for anti-sharing device lock
+function getDeviceId() {
+  try {
+    let id = localStorage.getItem('sp_dev_id');
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now().toString(36);
+      localStorage.setItem('sp_dev_id', id);
+    }
+    return id;
+  } catch {
+    return 'dev_anon';
+  }
+}
+
+function getDeviceSummary() {
+  const ua = navigator.userAgent || '';
+  let os = 'Unknown Device';
+  if (/iPhone/i.test(ua)) os = 'iPhone (iOS)';
+  else if (/iPad/i.test(ua)) os = 'iPad (iPadOS)';
+  else if (/Android/i.test(ua)) os = 'Android Phone';
+  else if (/Windows/i.test(ua)) os = 'Windows PC';
+  else if (/Mac OS X|Macintosh/i.test(ua)) os = 'Mac (macOS)';
+  else if (/Linux/i.test(ua)) os = 'Linux';
+  let br = 'Browser';
+  if (/MicroMessenger/i.test(ua)) br = 'WeChat';
+  else if (/Edg\//i.test(ua)) br = 'Edge';
+  else if (/Chrome\//i.test(ua)) br = 'Chrome';
+  else if (/Safari\//i.test(ua)) br = 'Safari';
+  else if (/Firefox\//i.test(ua)) br = 'Firefox';
+  return `${os} · ${br}`;
+}
+
+function loadLocalJson(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+function saveLocalJson(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+let currentSession = null; // { role: 'admin'|'customer', who: string, code: string }
+let adminCodes = loadLocalJson('sp_admin_codes', []);
+let adminLogs = loadLocalJson('sp_admin_logs', []);
+let consumedPins = loadLocalJson('sp_consumed_pins', {}); // { [pin]: usesCount }
+
+function recordLocalLog(entry) {
+  const item = {
+    id: 'ev_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6),
+    ts: new Date().toISOString(),
+    ip: 'Local / Direct',
+    location: 'Client Session',
+    device: getDeviceSummary(),
+    ...entry,
+  };
+  adminLogs.unshift(item);
+  if (adminLogs.length > 200) adminLogs.length = 200;
+  saveLocalJson('sp_admin_logs', adminLogs);
+}
+
+function showLockError(msg) {
+  if (lockErr) {
+    lockErr.textContent = msg || 'Incorrect password. Please try again.';
+    lockErr.classList.add('on');
+  }
+  if (lockInput) {
+    lockInput.classList.add('err');
+    try { lockInput.select(); } catch {}
+  }
+  if (lockCard) {
+    lockCard.classList.remove('shake');
+    void lockCard.offsetWidth;
+    lockCard.classList.add('shake');
+  }
+}
 
 function lockPage(showToastMsg = false) {
   if (!CFG.password) {
     document.body.classList.remove('is-locked');
     return;
   }
+  currentSession = null;
+  if (btnAdminBoard) btnAdminBoard.classList.remove('on');
+  if (adminOv) adminOv.classList.remove('on');
+  if (sessionStatusTxt) sessionStatusTxt.textContent = 'Direct China Mirror Active · No Proxy Required';
   document.body.classList.add('is-locked');
   if (lockInput) {
     lockInput.value = '';
@@ -758,19 +995,35 @@ function lockPage(showToastMsg = false) {
     if (eyeIcon) eyeIcon.innerHTML = EYE_OPEN;
     setTimeout(() => { try { lockInput.focus(); } catch {} }, 30);
   }
-  if (lockErr) lockErr.classList.remove('on');
+  if (lockErr) {
+    lockErr.textContent = 'Incorrect password. Please try again.';
+    lockErr.classList.remove('on');
+  }
   if (showToastMsg) toast('Page locked');
 }
 
-function unlockPage() {
+function unlockPage(sessionInfo = { role: 'customer', who: 'Visitor', code: '' }) {
+  currentSession = sessionInfo;
   document.body.classList.remove('is-locked');
+  if (btnAdminBoard) {
+    btnAdminBoard.classList.toggle('on', sessionInfo.role === 'admin');
+  }
+  if (sessionStatusTxt) {
+    if (sessionInfo.role === 'admin') {
+      sessionStatusTxt.textContent = 'Admin Mode Unlocked · Full Visitor & PIN Console Active';
+    } else if (sessionInfo.maxUses === 1) {
+      sessionStatusTxt.textContent = `One-Time Pass (${sessionInfo.who}) · Single Session Only`;
+    } else {
+      sessionStatusTxt.textContent = 'Direct China Mirror Active · No Proxy Required';
+    }
+  }
   if (lockInput) {
     lockInput.value = '';
     lockInput.type = 'password';
     lockInput.classList.remove('err');
   }
   if (lockErr) lockErr.classList.remove('on');
-  toast('Page unlocked');
+  toast(sessionInfo.role === 'admin' ? 'Unlocked as Admin' : 'Page unlocked');
 }
 
 if (lockToggle && lockInput) {
@@ -790,28 +1043,374 @@ if (lockInput) {
 }
 
 if (lockForm) {
-  lockForm.onsubmit = (e) => {
+  lockForm.onsubmit = async (e) => {
     e.preventDefault();
-    const entered = lockInput ? lockInput.value : '';
+    const entered = (lockInput ? lockInput.value : '').trim();
+    const devId = getDeviceId();
+
+    // 1. Master Admin PIN (synchronous unlock + server audit log)
     if (entered === String(CFG.password)) {
-      unlockPage();
-    } else {
-      if (lockErr) lockErr.classList.add('on');
-      if (lockInput) {
-        lockInput.classList.add('err');
-        try { lockInput.select(); } catch {}
-      }
-      if (lockCard) {
-        lockCard.classList.remove('shake');
-        void lockCard.offsetWidth;
-        lockCard.classList.add('shake');
-      }
+      recordLocalLog({
+        type: 'unlock_admin',
+        status: 'ok',
+        code: 'Admin PIN',
+        who: 'Admin (Owner)',
+        detail: 'Unlocked portal + Admin Board',
+      });
+      unlockPage({ role: 'admin', who: 'Admin (Owner)', code: 'Admin PIN' });
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: entered, deviceId: devId }),
+      }).then(() => syncAdminState()).catch(() => {});
+      return;
     }
+
+    // 2. Check locally synced Customer PINs first (instant feedback)
+    const localMatch = adminCodes.find((c) => c.code === entered);
+    if (localMatch) {
+      if (localMatch.revoked) {
+        recordLocalLog({ type: 'blocked_revoked', status: 'blocked', code: entered, who: localMatch.label, detail: 'Attempted to use revoked PIN' });
+        showLockError('This access password has been revoked by the administrator.');
+        return;
+      }
+      if (localMatch.expiresAt && Date.now() > new Date(localMatch.expiresAt).getTime()) {
+        recordLocalLog({ type: 'blocked_expired', status: 'blocked', code: entered, who: localMatch.label, detail: 'Attempted to use expired PIN' });
+        showLockError('This temporary password has expired. Please request a new code.');
+        return;
+      }
+      if (localMatch.lockDevice && localMatch.boundDeviceId && localMatch.boundDeviceId !== devId) {
+        recordLocalLog({ type: 'blocked_sharing', status: 'blocked', code: entered, who: localMatch.label, detail: `Anti-share triggered: PIN locked to ${localMatch.boundDeviceLabel || 'first device'}` });
+        showLockError('Password sharing blocked: This PIN is locked to the first device that used it.');
+        return;
+      }
+      const totalUses = Math.max(localMatch.uses || 0, consumedPins[entered] || 0);
+      if (localMatch.maxUses > 0 && totalUses >= localMatch.maxUses) {
+        recordLocalLog({ type: 'blocked_exhausted', status: 'blocked', code: entered, who: localMatch.label, detail: `One-time/limited PIN already used (${totalUses}/${localMatch.maxUses})` });
+        showLockError(`This one-time password has already been used (${totalUses}/${localMatch.maxUses}) and is now locked.`);
+        return;
+      }
+      localMatch.uses = totalUses + 1;
+      consumedPins[entered] = localMatch.uses;
+      saveLocalJson('sp_consumed_pins', consumedPins);
+      if (!localMatch.boundDeviceId) {
+        localMatch.boundDeviceId = devId;
+        localMatch.boundDeviceLabel = getDeviceSummary();
+      }
+      localMatch.lastUsedAt = new Date().toISOString();
+      saveLocalJson('sp_admin_codes', adminCodes);
+      recordLocalLog({
+        type: 'unlock_customer',
+        status: 'ok',
+        code: entered,
+        who: localMatch.label,
+        detail: `Unlocked portal (use ${localMatch.uses}/${localMatch.maxUses || '∞'})`,
+      });
+      unlockPage({ role: 'customer', who: localMatch.label, code: entered, maxUses: localMatch.maxUses });
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: entered, deviceId: devId }),
+      }).catch(() => {});
+      return;
+    }
+
+    // 3. Immediate feedback if not matched locally; also check server /api/auth in case PIN was created on another device
+    showLockError('Incorrect password. Please try again.');
+    try {
+      const r = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: entered, deviceId: devId }),
+      });
+      const data = await r.json();
+      if (r.ok && data && data.ok) {
+        consumedPins[entered] = (consumedPins[entered] || 0) + 1;
+        saveLocalJson('sp_consumed_pins', consumedPins);
+        unlockPage({
+          role: data.role || 'customer',
+          who: data.label || 'Customer',
+          code: entered,
+          maxUses: data.maxUses || 1,
+        });
+        return;
+      }
+      if (data && data.error) {
+        showLockError(data.error);
+        return;
+      }
+    } catch {}
+
+    recordLocalLog({
+      type: 'blocked_wrong_pin',
+      status: 'blocked',
+      code: entered ? entered.slice(0, 12) : '(empty)',
+      who: 'Unknown Visitor',
+      detail: 'Entered wrong password',
+    });
   };
 }
 
 if (btnLockPage) {
   btnLockPage.onclick = () => lockPage(true);
+}
+
+/* ---- Admin Board Modal & API Sync ---- */
+async function syncAdminState() {
+  try {
+    const r = await fetch('/api/admin', {
+      headers: { 'x-admin-pin': String(CFG.password) },
+      cache: 'no-store',
+    });
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data.codes) && data.codes.length) {
+        const byCode = new Map(adminCodes.map((c) => [c.code, c]));
+        for (const sc of data.codes) byCode.set(sc.code, sc);
+        adminCodes = Array.from(byCode.values());
+        saveLocalJson('sp_admin_codes', adminCodes);
+      }
+      if (Array.isArray(data.logs) && data.logs.length) {
+        const byId = new Map(adminLogs.map((l) => [l.id, l]));
+        for (const sl of data.logs) byId.set(sl.id, sl);
+        adminLogs = Array.from(byId.values()).sort((a, b) => new Date(b.ts) - new Date(a.ts)).slice(0, 200);
+        saveLocalJson('sp_admin_logs', adminLogs);
+      }
+    }
+  } catch {}
+  renderAdminBoard();
+}
+
+function renderAdminBoard() {
+  const codeBox = $('#admCodeList');
+  const logBox = $('#admLogList');
+  if (!codeBox || !logBox) return;
+
+  const unlocks = adminLogs.filter((l) => l.type === 'unlock_admin' || l.type === 'unlock_customer').length;
+  const downloads = adminLogs.filter((l) => l.type === 'download').length;
+  const blocked = adminLogs.filter((l) => l.status === 'blocked').length;
+  const activeCodes = adminCodes.filter((c) => !c.revoked && (!c.maxUses || (c.uses || 0) < c.maxUses)).length;
+
+  const elU = $('#kpiUnlocks'); if (elU) elU.textContent = String(unlocks);
+  const elD = $('#kpiDownloads'); if (elD) elD.textContent = String(downloads);
+  const elA = $('#kpiActiveCodes'); if (elA) elA.textContent = String(activeCodes);
+  const elB = $('#kpiBlocked'); if (elB) elB.textContent = String(blocked);
+
+  if (!adminCodes.length) {
+    codeBox.innerHTML = `<div style="color:var(--dim);font-size:12.5px;padding:10px">No customer PINs created yet. Use the form above to generate a 1-time password for a customer.</div>`;
+  } else {
+    codeBox.innerHTML = adminCodes.map((c) => {
+      const expired = c.expiresAt && Date.now() > new Date(c.expiresAt).getTime();
+      const usedUp = c.maxUses > 0 && (c.uses || 0) >= c.maxUses;
+      let badge = '<span class="st-badge st-ok">Active</span>';
+      if (c.revoked) badge = '<span class="st-badge st-bad">Revoked</span>';
+      else if (expired) badge = '<span class="st-badge st-bad">Expired</span>';
+      else if (usedUp) badge = '<span class="st-badge st-warn">Used Up (Locked)</span>';
+
+      const expTxt = c.expiresAt ? `Expires ${new Date(c.expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'No expiry';
+      const devTxt = c.boundDeviceLabel ? ` · Locked to: <b>${esc(c.boundDeviceLabel)}</b>` : (c.lockDevice ? ' · Anti-Share ON' : '');
+      return `<div class="code-row">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="code-pin">${esc(c.code)}</span>
+          ${badge}
+          <span><b>${esc(c.label)}</b></span>
+          <span style="color:var(--dim)">Uses: <b>${c.uses || 0}/${c.maxUses || '∞'}</b> · ${esc(expTxt)}${devTxt}</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="btn sm ghost" data-copy-pin="${esc(c.code)}" style="min-height:32px;padding:4px 10px">Copy PIN</button>
+          <button type="button" class="btn sm ghost" data-copy-msg="${esc(c.code)}" data-label="${esc(c.label)}" data-max="${c.maxUses || 0}" style="min-height:32px;padding:4px 10px">Copy Msg</button>
+          <button type="button" class="btn sm ghost" data-toggle-pin="${esc(c.code)}" style="min-height:32px;padding:4px 10px">${c.revoked ? 'Unblock' : 'Revoke'}</button>
+          <button type="button" class="btn sm ghost" data-del-pin="${esc(c.code)}" style="min-height:32px;padding:4px 10px;color:#fca5a5">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    codeBox.querySelectorAll('[data-copy-pin]').forEach((b) => {
+      b.onclick = () => {
+        navigator.clipboard?.writeText(b.dataset.copyPin).catch(() => {});
+        toast(`Copied PIN: ${b.dataset.copyPin}`);
+      };
+    });
+    codeBox.querySelectorAll('[data-copy-msg]').forEach((b) => {
+      b.onclick = () => {
+        const pin = b.dataset.copyMsg;
+        const max = Number(b.dataset.max);
+        const msg = `Download Portal: ${location.origin}\nYour One-Time Access PIN: ${pin}\n(${max === 1 ? 'Valid for 1 login only — please download your client before closing the page. Do not share.' : 'Device-locked access PIN'})`;
+        navigator.clipboard?.writeText(msg).catch(() => {});
+        toast('Copied customer instructions + PIN');
+      };
+    });
+    codeBox.querySelectorAll('[data-toggle-pin]').forEach((b) => {
+      b.onclick = async () => {
+        const pin = b.dataset.togglePin;
+        const item = adminCodes.find((x) => x.code === pin);
+        if (item) {
+          item.revoked = !item.revoked;
+          saveLocalJson('sp_admin_codes', adminCodes);
+          renderAdminBoard();
+        }
+        try {
+          await fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-admin-pin': String(CFG.password) },
+            body: JSON.stringify({ action: 'toggle_revoke', code: pin }),
+          });
+        } catch {}
+      };
+    });
+    codeBox.querySelectorAll('[data-del-pin]').forEach((b) => {
+      b.onclick = async () => {
+        const pin = b.dataset.delPin;
+        adminCodes = adminCodes.filter((x) => x.code !== pin);
+        saveLocalJson('sp_admin_codes', adminCodes);
+        renderAdminBoard();
+        try {
+          await fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-admin-pin': String(CFG.password) },
+            body: JSON.stringify({ action: 'delete_code', code: pin }),
+          });
+        } catch {}
+      };
+    });
+  }
+
+  if (!adminLogs.length) {
+    logBox.innerHTML = `<div style="color:var(--dim);font-size:12.5px;padding:10px">No visitor activity recorded yet.</div>`;
+  } else {
+    logBox.innerHTML = adminLogs.map((l) => {
+      let badge = '<span class="st-badge st-ok">Unlocked</span>';
+      if (l.type === 'download') badge = '<span class="st-badge st-dl">Downloaded</span>';
+      else if (l.status === 'blocked') badge = '<span class="st-badge st-bad">Blocked</span>';
+      const timeStr = new Date(l.ts).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return `<div class="log-row">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+          ${badge}
+          <b>${esc(l.who || 'Visitor')}</b>
+          <span style="color:#67e8f9;font-family:ui-monospace,monospace;font-size:12px">[${esc(l.code || '-')}]</span>
+          <span>${esc(l.detail || '')}</span>
+        </div>
+        <div style="color:var(--dim);font-size:11.5px;display:flex;gap:8px;flex-wrap:wrap">
+          <span>${esc(l.device || '')}</span>
+          <span>· ${esc(l.ip || 'Direct')}${l.location ? ' (' + esc(l.location) + ')' : ''}</span>
+          <span>· ${esc(timeStr)}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+if (btnAdminBoard) {
+  btnAdminBoard.onclick = () => {
+    if (adminOv) adminOv.classList.add('on');
+    syncAdminState();
+  };
+}
+const btnCloseAdmin = $('#btnCloseAdmin');
+if (btnCloseAdmin) btnCloseAdmin.onclick = () => adminOv && adminOv.classList.remove('on');
+const btnRefreshAdmin = $('#btnRefreshAdmin');
+if (btnRefreshAdmin) btnRefreshAdmin.onclick = () => { toast('Refreshing log…'); syncAdminState(); };
+const btnCopyPs1 = $('#btnCopyPs1');
+if (btnCopyPs1) {
+  btnCopyPs1.onclick = async () => {
+    const txt = [
+      `$work = "$env:TEMP\\sp-vpn-deploy"`,
+      `if (!(Test-Path "$work\\.git")) { git clone https://github.com/Kaixx23/vpn-download-portal.git $work }`,
+      `Set-Location $work`,
+      `$b = Invoke-RestMethod "${location.origin}/api/bundle.json"`,
+      `foreach ($p in $b.files.PSObject.Properties) {`,
+      `  $t = Join-Path $work $p.Name`,
+      `  New-Item -ItemType Directory -Force -Path (Split-Path $t -Parent) | Out-Null`,
+      `  [IO.File]::WriteAllBytes($t, [Convert]::FromBase64String($p.Value))`,
+      `}`,
+      `git config user.name "Kaixx23"`,
+      `git config user.email "kaixx23@users.noreply.github.com"`,
+      `git add -A`,
+      `git commit -m "feat: Admin Board + 1-time PINs + 5G download speed fix"`,
+      `git push origin main`,
+    ].join('\r\n');
+    const wrap = $('#ps1BoxWrap');
+    const area = $('#ps1Text');
+    if (wrap) wrap.style.display = 'block';
+    if (area) {
+      area.value = txt;
+      area.focus();
+      area.select();
+    }
+    try { document.execCommand('copy'); } catch {}
+    try { await navigator.clipboard.writeText(txt); } catch {}
+    toast('Short PowerShell script copied! Press Ctrl+C then paste into PowerShell.');
+  };
+}
+if (adminOv) {
+  adminOv.onclick = (e) => { if (e.target.id === 'adminOv') adminOv.classList.remove('on'); };
+}
+
+const admCodeForm = $('#admCodeForm');
+if (admCodeForm) {
+  admCodeForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const label = ($('#admLabel')?.value || 'Customer').trim();
+    const maxUses = Number($('#admMaxUses')?.value ?? 1);
+    const expiresInMinutes = Number($('#admExpiry')?.value ?? 60);
+    const lockDevice = Boolean($('#admLockDevice')?.checked);
+    const customCode = ($('#admCustomPin')?.value || '').trim();
+    const code = customCode || String(Math.floor(100000 + Math.random() * 900000));
+
+    if (code === String(CFG.password) || adminCodes.some((c) => c.code === code)) {
+      toast('PIN already exists — pick another');
+      return;
+    }
+
+    const newItem = {
+      code,
+      label,
+      maxUses,
+      uses: 0,
+      lockDevice,
+      boundDeviceId: null,
+      boundDeviceLabel: null,
+      createdAt: new Date().toISOString(),
+      expiresAt: expiresInMinutes > 0 ? new Date(Date.now() + expiresInMinutes * 60000).toISOString() : null,
+      revoked: false,
+    };
+    adminCodes.unshift(newItem);
+    saveLocalJson('sp_admin_codes', adminCodes);
+    delete consumedPins[code];
+    saveLocalJson('sp_consumed_pins', consumedPins);
+
+    if ($('#admLabel')) $('#admLabel').value = '';
+    if ($('#admCustomPin')) $('#admCustomPin').value = '';
+    renderAdminBoard();
+    navigator.clipboard?.writeText(code).catch(() => {});
+    toast(`Created 1-Time PIN ${code} (copied!)`);
+
+    try {
+      await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-admin-pin': String(CFG.password) },
+        body: JSON.stringify({ action: 'create_code', label, maxUses, expiresInMinutes, lockDevice, customCode: code }),
+      });
+      syncAdminState();
+    } catch {}
+  };
+}
+
+const btnClearLogs = $('#btnClearLogs');
+if (btnClearLogs) {
+  btnClearLogs.onclick = async () => {
+    adminLogs = [];
+    saveLocalJson('sp_admin_logs', adminLogs);
+    renderAdminBoard();
+    try {
+      await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-admin-pin': String(CFG.password) },
+        body: JSON.stringify({ action: 'clear_logs' }),
+      });
+    } catch {}
+    toast('Access history cleared');
+  };
 }
 
 // Always lock on initial load and if restored from browser back/forward cache
@@ -821,6 +1420,10 @@ window.addEventListener('pageshow', (e) => {
 });
 
 let CAT = null;
+// Migrate any old 'ghfast' cached selection (which stripped Content-Length -> "of ?") back to 'self'
+if (localStorage.getItem('src') === 'ghfast') {
+  try { localStorage.removeItem('src'); } catch {}
+}
 let sourceId = localStorage.getItem('src') || 'self';
 let osFilter = null;
 
@@ -943,6 +1546,25 @@ function renderApps() {
 /* ---- each file: right-click (or long-press) shows a QR to pull it onto a phone ---- */
 function bindFileLinks() {
   $('#apps').querySelectorAll('.f').forEach((a) => {
+    a.addEventListener('click', () => {
+      const appName = a.dataset.name || 'Client';
+      const rel = a.dataset.rel || '';
+      const fileName = rel.split('/').pop() || '';
+      const who = currentSession?.who || 'Visitor';
+      const code = currentSession?.code || '-';
+      recordLocalLog({
+        type: 'download',
+        status: 'ok',
+        code,
+        who,
+        detail: `Downloaded ${appName} (${fileName})`,
+      });
+      fetch('/api/auth/event', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code, who, app: appName, file: fileName }),
+      }).catch(() => {});
+    });
     a.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       const abs = new URL(a.getAttribute('href'), location.origin).href;
@@ -999,17 +1621,18 @@ function renderSources() {
 
 async function probeSources(autoSwitch = false) {
   if (!CAT || !CAT.sources) return;
+  const testAsset = 'XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst';
   const results = await Promise.all(
     CAT.sources.map(async (s) => {
       const probeUrl =
         s.mode === 'self'
-          ? location.origin + '/healthz?t=' + Date.now()
+          ? location.origin + '/m/' + testAsset + '?t=' + Date.now()
           : s.mode === 'raw'
-          ? 'https://github.com/favicon.ico?t=' + Date.now()
-          : s.base.replace(/\/$/, '') + '/';
+          ? 'https://github.com/' + testAsset + '?t=' + Date.now()
+          : s.base.replace(/\/$/, '') + '/https://github.com/' + testAsset + '?t=' + Date.now();
       const t0 = performance.now();
       const ctl = new AbortController();
-      const to = setTimeout(() => ctl.abort(), 3800);
+      const to = setTimeout(() => ctl.abort(), 4500);
       try {
         await fetch(probeUrl, { mode: 'no-cors', cache: 'no-store', signal: ctl.signal });
         clearTimeout(to);
@@ -1025,7 +1648,10 @@ async function probeSources(autoSwitch = false) {
   );
   renderSources();
   if (autoSwitch) {
-    const best = results.filter((r) => Number.isFinite(r.ms)).sort((a, b) => a.ms - b.ms)[0];
+    // Prefer lines that preserve Content-Length & Range ('self', 'ghproxy', 'ghproxy2', 'gh')
+    const best = results
+      .filter((r) => Number.isFinite(r.ms))
+      .sort((a, b) => (a.id === 'ghfast' ? a.ms + 300 : a.ms) - (b.id === 'ghfast' ? b.ms + 300 : b.ms))[0];
     if (best) {
       sourceId = best.id;
       localStorage.setItem('src', sourceId);

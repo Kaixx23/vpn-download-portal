@@ -54,11 +54,11 @@
   force = true
 
 # --- Download mirroring ---
-# True mirror via Edge Function (enabled by default so China users never hit blocked github.com directly)
-# Fallback redirect uses ghfast.top CDN if edge function is bypassed
+# High-speed Direct CDN Resolver via Edge Function (resolves github.com server-side to
+# pre-signed S3/Fastly CDN URL so downloads run at full 5G speed with exact Content-Length)
 [[redirects]]
   from = "/m/*"
-  to = "https://ghfast.top/https://github.com/:splat"
+  to = "https://gh-proxy.com/https://github.com/:splat"
   status = 302
   force = true
 
@@ -72,6 +72,18 @@
 [[edge_functions]]
   path = "/healthz"
   function = "healthz"
+
+[[edge_functions]]
+  path = "/api/auth"
+  function = "admin"
+
+[[edge_functions]]
+  path = "/api/auth/event"
+  function = "admin"
+
+[[edge_functions]]
+  path = "/api/admin"
+  function = "admin"
 
 [[edge_functions]]
   path = "/m/*"

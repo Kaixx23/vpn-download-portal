@@ -1,11 +1,14 @@
 # Netlify _redirects fallback (netlify.toml is primary)
 # API
 /api/manifest  /catalog.json  200
+/api/auth  /.netlify/edge-functions/admin  200
+/api/auth/event  /.netlify/edge-functions/admin  200
+/api/admin  /.netlify/edge-functions/admin  200
 /vendor/qrcode.mjs  /qrcode.mjs  200
 /healthz  /.netlify/edge-functions/healthz  200
 
 # Download mirroring - Edge Function handles /m/*, fallback to China-reachable CDN mirror
-/m/*  https://ghfast.top/https://github.com/:splat  302
+/m/*  https://gh-proxy.com/https://github.com/:splat  302
 
 # SPA fallback
 /*  /index.html  200
