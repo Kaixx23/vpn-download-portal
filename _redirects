@@ -4,8 +4,8 @@
 /vendor/qrcode.mjs  /qrcode.mjs  200
 /healthz  /.netlify/edge-functions/healthz  200
 
-# Download mirroring - redirect mode (default)
-/m/*  https://github.com/:splat  302
+# Download mirroring - Edge Function handles /m/*, fallback to China-reachable CDN mirror
+/m/*  https://ghfast.top/https://github.com/:splat  302
 
 # SPA fallback
 /*  /index.html  200

@@ -27,10 +27,19 @@ const TRUSTED_HOSTS = new Set([
 ]);
 
 const ASSET_RE = /^\/m\/([A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)\/releases\/download\/([^/]+)\/(.+)$/;
+const SIGNED_URL_CACHE = new Map();
+const SIGNED_TTL_MS = 3 * 60 * 1000;
 
-export default async (request, context) => {
+function isTrustedHost(hostname) {
+  if (TRUSTED_HOSTS.has(hostname)) return true;
+  if (hostname.endsWith(".github.com") || hostname.endsWith(".githubusercontent.com")) return true;
+  if (hostname.startsWith("github-production-release-asset") && hostname.endsWith(".s3.amazonaws.com")) return true;
+  return false;
+}
+
+export default async (request) => {
   const url = new URL(request.url);
-  const pathname = url.pathname;
+  const pathname = decodeURIComponent(url.pathname).replace(/\/{2,}/g, "/");
 
   const m = pathname.match(ASSET_RE);
   if (!m) {
@@ -42,71 +51,59 @@ export default async (request, context) => {
 
   const [, repo, tag, file] = m;
   const upstream = `https://github.com/${repo}/releases/download/${tag}/${file}`;
+  const range = request.headers.get("range");
+  const method = request.method === "HEAD" ? "HEAD" : "GET";
 
-  // Resolve upstream following redirects manually, checking trusted hosts
-  let resolvedUrl = upstream;
+  const cached = SIGNED_URL_CACHE.get(upstream);
+  let targetUrl = cached && Date.now() - cached.ts < SIGNED_TTL_MS ? cached.url : upstream;
+
   try {
-    for (let i = 0; i < 6; i++) {
-      const headRes = await fetch(resolvedUrl, {
-        method: "HEAD",
+    let upstreamRes = null;
+    for (let hop = 0; hop < 6; hop++) {
+      upstreamRes = await fetch(targetUrl, {
+        method,
         redirect: "manual",
-        headers: { "user-agent": "vpn-mirror/1.0 (netlify edge)" },
+        headers: {
+          "user-agent": "vpn-mirror/1.0 (netlify edge)",
+          ...(range ? { range } : {}),
+        },
       });
-      if (headRes.status >= 300 && headRes.status < 400) {
-        const loc = headRes.headers.get("location");
+      if (upstreamRes.status >= 300 && upstreamRes.status < 400) {
+        const loc = upstreamRes.headers.get("location");
         if (!loc) break;
-        const next = new URL(loc, resolvedUrl);
-        if (!TRUSTED_HOSTS.has(next.hostname) && !next.hostname.endsWith(".github.com") && !next.hostname.endsWith(".amazonaws.com") && !next.hostname.endsWith(".githubusercontent.com")) {
-          // Allowlist is intentionally permissive for S3 - if you want strict, check TRUSTED_HOSTS
-          // For now, allow any redirect from github.com as GitHub uses many S3 hosts
+        const next = new URL(loc, targetUrl);
+        if (!isTrustedHost(next.hostname)) {
+          return new Response("Untrusted upstream redirect host", { status: 502 });
         }
-        resolvedUrl = next.toString();
+        targetUrl = next.toString();
+        SIGNED_URL_CACHE.set(upstream, { url: targetUrl, ts: Date.now() });
         continue;
       }
       break;
     }
-  } catch (e) {
-    // If HEAD fails, fallback to direct fetch with follow
-    resolvedUrl = upstream;
-  }
 
-  // Now fetch the actual file with streaming
-  try {
-    const upstreamRes = await fetch(resolvedUrl, {
-      method: "GET",
-      redirect: "follow",
-      headers: {
-        "user-agent": "vpn-mirror/1.0 (netlify edge)",
-        // Forward Range header if present (for resume)
-        ...(request.headers.get("range") ? { range: request.headers.get("range") } : {}),
-      },
-    });
-
-    if (!upstreamRes.ok) {
-      return new Response(`Upstream returned ${upstreamRes.status}`, {
-        status: upstreamRes.status,
+    if (!upstreamRes || (!upstreamRes.ok && upstreamRes.status !== 206)) {
+      return new Response(`Upstream returned ${upstreamRes ? upstreamRes.status : 502}`, {
+        status: upstreamRes ? upstreamRes.status : 502,
         headers: { "content-type": "text/plain" },
       });
     }
 
     const headers = new Headers();
-    // Copy relevant headers
-    const contentType = upstreamRes.headers.get("content-type") || "application/octet-stream";
     const contentLength = upstreamRes.headers.get("content-length");
     const contentRange = upstreamRes.headers.get("content-range");
 
-    headers.set("content-type", contentType);
+    headers.set("content-type", "application/octet-stream");
     headers.set("content-disposition", `attachment; filename="${decodeURIComponent(file).replace(/"/g, "")}"`);
     headers.set("cache-control", "public, max-age=604800, immutable");
-    headers.set("x-mirror-mode", "mirror-edge");
-    headers.set("x-upstream-host", new URL(resolvedUrl).hostname);
+    headers.set("x-mirror-mode", "mirror");
+    headers.set("x-upstream-host", new URL(targetUrl).hostname);
     headers.set("accept-ranges", "bytes");
     if (contentLength) headers.set("content-length", contentLength);
     if (contentRange) headers.set("content-range", contentRange);
 
-    // Stream the body
-    return new Response(upstreamRes.body, {
-      status: upstreamRes.status,
+    return new Response(method === "HEAD" ? null : upstreamRes.body, {
+      status: upstreamRes.status === 206 ? 206 : 200,
       headers,
     });
   } catch (e) {

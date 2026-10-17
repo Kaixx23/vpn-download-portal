@@ -1,12 +1,12 @@
 {
   "_comment": "Edit this file to change what the portal offers. Then run: npm run build:catalog",
-  "_updated": "2026-08-27",
+  "_updated": "2026-10-17",
   "sources": [
-    { "id": "self",    "label": "This site",   "base": "", "mode": "self" },
-    { "id": "gh",      "label": "GitHub (official)", "base": "https://github.com", "mode": "raw" },
-    { "id": "ghproxy", "label": "Mirror A",  "base": "https://gh-proxy.com/", "mode": "prefix" },
-    { "id": "ghproxy2","label": "Mirror B",  "base": "https://ghproxy.net/", "mode": "prefix" },
-    { "id": "gofans",  "label": "Mirror C",  "base": "https://ghfast.top/", "mode": "prefix" }
+    { "id": "self",    "label": "This site (Direct)", "base": "", "mode": "self" },
+    { "id": "ghfast",  "label": "China Fast CDN 1",  "base": "https://ghfast.top/", "mode": "prefix" },
+    { "id": "ghproxy", "label": "China Fast CDN 2",  "base": "https://gh-proxy.com/", "mode": "prefix" },
+    { "id": "ghproxy2","label": "China Fast CDN 3",  "base": "https://ghproxy.net/", "mode": "prefix" },
+    { "id": "gh",      "label": "GitHub (Official)", "base": "https://github.com", "mode": "raw" }
   ],
   "apps": [
     {

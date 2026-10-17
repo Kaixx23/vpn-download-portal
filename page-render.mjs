@@ -10,25 +10,39 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseHTML } from "linkedom";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(here, "..");
+const root = fs.existsSync(path.join(here, "index.html")) ? here : path.join(here, "..");
+const staticDir = fs.existsSync(path.join(root, "static", "index.html"))
+  ? path.join(root, "static")
+  : root;
+const qrPath = fs.existsSync(path.join(staticDir, "vendor", "qrcode.mjs"))
+  ? path.join(staticDir, "vendor", "qrcode.mjs")
+  : path.join(staticDir, "qrcode.mjs");
 
 // Run the shipped page module against a fresh DOM with the given query string.
 // Returns the DOM + helpers so each test can assert on what actually rendered.
 async function bootPage({ userAgent, catalog }) {
-  const html = fs.readFileSync(path.join(root, "static", "index.html"), "utf8");
+  const html = fs.readFileSync(path.join(staticDir, "index.html"), "utf8");
   const { window, document } = parseHTML(html);
   const pageJs = html
     .match(/<script type="module">([\s\S]*?)<\/script>/)[1]
     .replace(
+      "import('/vendor/qrcode.mjs')",
+      `import('${pathToFileURL(qrPath).href}')`,
+    )
+    .replace(
       "from '/vendor/qrcode.mjs'",
-      `from '${pathToFileURL(path.join(root, "static", "vendor", "qrcode.mjs")).href}'`,
+      `from '${pathToFileURL(qrPath).href}'`,
     );
   const tmpModule = path.join(root, `.page-test-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`);
   fs.writeFileSync(tmpModule, pageJs);
 
   globalThis.window = window;
   globalThis.document = document;
-  globalThis.navigator = { userAgent, platform: "Win32", maxTouchPoints: 0 };
+  Object.defineProperty(globalThis, "navigator", {
+    value: { userAgent, platform: "Win32", maxTouchPoints: 0 },
+    configurable: true,
+    writable: true,
+  });
   globalThis.location = { search: "", origin: "https://dl.example.com", protocol: "https:", host: "dl.example.com", href: "https://dl.example.com/" };
   const store = new Map();
   globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) };
@@ -52,14 +66,32 @@ async function bootPage({ userAgent, catalog }) {
 }
 
 test("portal page renders English, links to the mirror, and swaps per device", async () => {
-  const catalog = JSON.parse(fs.readFileSync(path.join(root, "static", "catalog.json"), "utf8"));
-  const { window, q, qa, cleanup } = await bootPage({
+  const catalog = JSON.parse(fs.readFileSync(path.join(staticDir, "catalog.json"), "utf8"));
+  const { window, document, q, qa, cleanup } = await bootPage({
     userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     catalog,
   });
   try {
     const checks = [];
     const check = (name, cond, extra = "") => checks.push([name, !!cond, extra]);
+
+    // Page lock checks: starts locked on every load, rejects wrong PIN, unlocks with 123456, re-locks on demand
+    check("page starts locked on load", document.body.classList.contains("is-locked"));
+    q("#lockInput").value = "wrong-pin";
+    q("#lockForm").dispatchEvent(new window.Event("submit", { cancelable: true }));
+    check("wrong password keeps page locked", document.body.classList.contains("is-locked"));
+    check("wrong password shows error", q("#lockErr").classList.contains("on"));
+
+    q("#lockInput").value = "200324";
+    q("#lockForm").dispatchEvent(new window.Event("submit", { cancelable: true }));
+    check("correct password (200324) unlocks page", !document.body.classList.contains("is-locked"));
+
+    q("#btnLockPage").dispatchEvent(new window.Event("click"));
+    check("Lock Page button locks page again", document.body.classList.contains("is-locked"));
+
+    q("#lockInput").value = "200324";
+    q("#lockForm").dispatchEvent(new window.Event("submit", { cancelable: true }));
+    check("re-entering password unlocks page again", !document.body.classList.contains("is-locked"));
 
     check("five device tabs", qa("#tabs .tab").length === 5, `${qa("#tabs .tab").length}`);
     check("auto-detected Windows", /Windows/.test(q("#tabs .tab.on")?.textContent || ""), q("#tabs .tab.on")?.textContent);
