@@ -5,6 +5,7 @@
  */
 
 const ADMIN_PIN = Deno.env.get("ADMIN_PIN") || "200324";
+const CUSTOMER_PIN = Deno.env.get("CUSTOMER_PIN") || "200303";
 
 // Persistent state within the Edge isolate
 const STATE = globalThis.__SP_PORTAL_ADMIN_STATE__ || {
@@ -105,6 +106,28 @@ export default async (request, context) => {
         role: "admin",
         who: "Admin (Owner)",
         label: "Admin (Owner)",
+      });
+    }
+
+    if (pin === CUSTOMER_PIN) {
+      addLog({
+        type: "unlock_customer",
+        status: "ok",
+        who: "Customer (200303)",
+        code: CUSTOMER_PIN,
+        device,
+        ip,
+        location,
+        detail: "Unlocked portal with permanent customer PIN",
+      });
+      return json({
+        ok: true,
+        role: "customer",
+        who: "Customer (200303)",
+        label: "Customer (200303)",
+        code: CUSTOMER_PIN,
+        uses: 0,
+        maxUses: 0,
       });
     }
 

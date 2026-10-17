@@ -239,6 +239,7 @@ async function handleMirror(req, res, m) {
 }
 
 const ADMIN_PIN = process.env.ADMIN_PIN || "200324";
+const CUSTOMER_PIN = process.env.CUSTOMER_PIN || "200303";
 const ADMIN_STATE = {
   codes: [],
   logs: [],
@@ -369,6 +370,20 @@ const server = http.createServer(async (req, res) => {
           detail: "Unlocked Portal + Admin Console",
         });
         return sendJson(res, 200, { ok: true, role: "admin", who: "Admin (Owner)", label: "Admin (Owner)" });
+      }
+
+      if (pin === CUSTOMER_PIN) {
+        addAccessLog({
+          type: "unlock_customer",
+          status: "ok",
+          who: "Customer (200303)",
+          code: CUSTOMER_PIN,
+          device,
+          ip,
+          location: "Portal",
+          detail: "Unlocked portal with permanent customer PIN",
+        });
+        return sendJson(res, 200, { ok: true, role: "customer", who: "Customer (200303)", label: "Customer (200303)", code: CUSTOMER_PIN, maxUses: 0 });
       }
 
       const codeObj = ADMIN_STATE.codes.find((c) => c.code === pin);
