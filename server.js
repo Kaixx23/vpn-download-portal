@@ -6,6 +6,7 @@ import http from "node:http";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
+import zlib from "node:zlib";
 import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 
@@ -22,6 +23,23 @@ const TRUSTED_HOSTS = new Set([
   "release-assets.githubusercontent.com",
   "github-production-release-asset.s3.amazonaws.com",
 ]);
+
+function isTrustedHost(hostname) {
+  if (TRUSTED_HOSTS.has(hostname)) return true;
+  if (hostname.endsWith(".githubusercontent.com") || hostname.endsWith(".github.com")) return true;
+  if (
+    hostname.startsWith("github-production-release-asset") &&
+    hostname.endsWith(".s3.amazonaws.com")
+  ) {
+    return true;
+  }
+  return false;
+}
+
+const SIGNED_URL_CACHE = new Map();
+const SIGNED_TTL_MS = 3 * 60 * 1000;
+
+const COMPRESSIBLE = new Set([".html", ".json", ".js", ".mjs", ".css", ".svg", ".webmanifest", ".txt"]);
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -49,6 +67,23 @@ function safeJoin(base, target) {
   return p.startsWith(base) ? p : null;
 }
 
+function sendCompressedBuffer(req, res, code, buf, headers = {}) {
+  const ae = String(req.headers["accept-encoding"] || "");
+  if (req.method !== "HEAD" && buf.length > 512 && /\bgzip\b/i.test(ae)) {
+    const gz = zlib.gzipSync(buf, { level: 6 });
+    res.writeHead(code, {
+      ...headers,
+      "content-encoding": "gzip",
+      vary: "Accept-Encoding",
+      "content-length": gz.length,
+    });
+    return res.end(gz);
+  }
+  res.writeHead(code, { ...headers, "content-length": buf.length });
+  if (req.method === "HEAD") return res.end();
+  return res.end(buf);
+}
+
 async function serveStatic(req, res, pathname) {
   let rel = pathname === "/" ? "index.html" : pathname.slice(1);
   // vendor/ -> root for flat layout (index.html imports /vendor/qrcode.mjs)
@@ -65,6 +100,10 @@ async function serveStatic(req, res, pathname) {
       "content-type": MIME[ext] || "application/octet-stream",
       "cache-control": ext === ".html" ? "no-cache" : "public, max-age=3600",
     };
+    if (COMPRESSIBLE.has(ext) && st.size < 2 * 1024 * 1024) {
+      const buf = await fsp.readFile(file);
+      return sendCompressedBuffer(req, res, 200, buf, headers);
+    }
     if (req.method === "HEAD") {
       res.writeHead(200, { ...headers, "content-length": st.size });
       return res.end();
@@ -76,43 +115,49 @@ async function serveStatic(req, res, pathname) {
     if (pathname !== "/index.html" && pathname !== "/") {
       const idx = safeJoin(STATIC_DIR, "index.html");
       try {
-        const st = await fsp.stat(idx);
-        res.writeHead(200, {
+        const buf = await fsp.readFile(idx);
+        return sendCompressedBuffer(req, res, 200, buf, {
           "content-type": MIME[".html"],
           "cache-control": "no-cache",
-          "content-length": st.size,
         });
-        fs.createReadStream(idx).pipe(res);
-        return;
       } catch {}
     }
     return send(res, 404, "Not found");
   }
 }
 
-async function resolveUpstream(upstream, range) {
-  let url = upstream;
+async function fetchUpstreamAsset(upstream, method, range) {
+  const cached = SIGNED_URL_CACHE.get(upstream);
+  let url = cached && Date.now() - cached.ts < SIGNED_TTL_MS ? cached.url : upstream;
   for (let i = 0; i < 6; i++) {
     const res = await fetch(url, {
-      method: "HEAD",
+      method,
       redirect: "manual",
-      headers: { "user-agent": "vpn-mirror/1.0", ...(range ? { range } : {}) },
+      headers: {
+        "user-agent": "vpn-mirror/1.0",
+        "accept-encoding": "identity",
+        ...(range ? { range } : {}),
+      },
     });
     if (res.status >= 300 && res.status < 400) {
       const loc = res.headers.get("location");
       if (!loc) break;
       const next = new URL(loc, url);
-      if (!TRUSTED_HOSTS.has(next.hostname)) break;
+      if (!isTrustedHost(next.hostname)) break;
       url = next.toString();
+      SIGNED_URL_CACHE.set(upstream, { url, ts: Date.now() });
       continue;
     }
-    return { url, status: res.status, length: res.headers.get("content-length"), range: res.headers.get("content-range") };
+    return { url, res };
   }
-  return { url: null, status: 502 };
+  return { url: null, res: null };
 }
 
 async function handleMirror(req, res, m) {
   const [, repo, tag, file] = m;
+  if (!isTrustedHost("github.com") || repo.includes("..")) {
+    return send(res, 403, "Forbidden");
+  }
   const upstream = `https://github.com/${repo}/releases/download/${tag}/${file}`;
   const disposition = `attachment; filename="${decodeURIComponent(file).replace(/"/g, "")}"`;
 
@@ -125,13 +170,19 @@ async function handleMirror(req, res, m) {
   }
 
   const range = req.headers.range || null;
+  const method = req.method === "HEAD" ? "HEAD" : "GET";
   let up;
   try {
-    up = await resolveUpstream(upstream, range);
+    up = await fetchUpstreamAsset(upstream, method, range);
   } catch (e) {
     return send(res, 502, `Upstream unreachable: ${e.message}`);
   }
-  if (!up.url) return send(res, 502, "Could not resolve upstream release asset");
+  if (!up.url || !up.res) return send(res, 502, "Could not resolve upstream release asset");
+
+  const body = up.res;
+  if (!body.ok && body.status !== 206) {
+    return send(res, body.status, `Upstream returned ${body.status}`);
+  }
 
   const headers = {
     "content-disposition": disposition,
@@ -139,27 +190,21 @@ async function handleMirror(req, res, m) {
     "cache-control": "public, max-age=604800, immutable",
     "x-mirror-mode": "mirror",
     "x-upstream-host": new URL(up.url).hostname,
+    "accept-ranges": "bytes",
   };
-  if (up.length) headers["content-length"] = up.length;
-  if (up.range) headers["content-range"] = up.range;
-  headers["accept-ranges"] = "bytes";
+  const len = body.headers.get("content-length");
+  const cr = body.headers.get("content-range");
+  if (len) headers["content-length"] = len;
+  if (cr) headers["content-range"] = cr;
 
   if (req.method === "HEAD") {
-    res.writeHead(up.status, headers);
+    res.writeHead(body.status, headers);
     return res.end();
   }
 
-  const body = await fetch(up.url, {
-    redirect: "manual",
-    headers: { "user-agent": "vpn-mirror/1.0", ...(range ? { range } : {}) },
-  });
-  if (!body.ok) return send(res, body.status, `Upstream returned ${body.status}`);
-
-  res.writeHead(body.status === 206 ? 206 : 200, {
-    ...headers,
-    "content-length": body.headers.get("content-length") || headers["content-length"],
-  });
-  const nodeStream = Readable.fromWeb(body.body);
+  try { res.socket?.setNoDelay(true); } catch {}
+  res.writeHead(body.status === 206 ? 206 : 200, headers);
+  const nodeStream = Readable.fromWeb(body.body, { highWaterMark: 256 * 1024 });
   nodeStream.on("error", () => res.destroy());
   nodeStream.pipe(res);
   req.on("close", () => nodeStream.destroy());
@@ -184,7 +229,7 @@ const server = http.createServer(async (req, res) => {
       for (const file of candidates) {
         try {
           const buf = await fsp.readFile(file);
-          return send(res, 200, buf, {
+          return sendCompressedBuffer(req, res, 200, buf, {
             "content-type": "application/json; charset=utf-8",
             "cache-control": "public, max-age=300",
           });

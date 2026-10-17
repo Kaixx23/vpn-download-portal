@@ -169,17 +169,55 @@ for (const app of cfg.apps) {
   }
 
   const checksums = new Map();
-  for (const name of ["sha256sum.txt", "sha256sums.txt", "SHA256SUMS", "checksums.txt"]) {
-    try {
-      const txt = await getText(
-        `https://github.com/${app.repo}/releases/download/${tag}/${name}`,
-      );
-      for (const line of txt.split("\n")) {
-        const mm = line.trim().match(/^([a-f0-9]{64})\s+\*?(.+)$/i);
-        if (mm) checksums.set(mm[2].trim(), mm[1].toLowerCase());
+  const apiSizes = new Map();
+
+  // Extract GitHub's native sha256 digests directly from expanded_assets HTML if present
+  try {
+    const expHtml = await getText(`https://github.com/${app.repo}/releases/expanded_assets/${tag}`);
+    for (const m of expHtml.matchAll(
+      /aria-label="Copy to clipboard digest for ([^"]+)"[^>]*value="sha256:([a-f0-9]{64})"/gi,
+    )) {
+      checksums.set(m[1].trim(), m[2].toLowerCase());
+    }
+  } catch {}
+
+  // Query GitHub Release API (1 request per repo) for exact byte sizes & digests
+  try {
+    const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
+    const apiHeaders = {
+      ...UA,
+      accept: "application/vnd.github+json",
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    };
+    const apiRes = await fetch(
+      `https://api.github.com/repos/${app.repo}/releases/tags/${encodeURIComponent(tag)}`,
+      { headers: apiHeaders, redirect: "follow" },
+    );
+    if (apiRes.ok) {
+      const relJson = await apiRes.json();
+      for (const a of relJson.assets || []) {
+        if (a.name && a.size) apiSizes.set(a.name, Number(a.size));
+        if (a.name && typeof a.digest === "string" && a.digest.startsWith("sha256:")) {
+          checksums.set(a.name, a.digest.slice(7).toLowerCase());
+        }
       }
-      if (checksums.size) break;
-    } catch {}
+    }
+  } catch {}
+
+  if (!checksums.size) {
+    for (const name of ["sha256sum.txt", "sha256sums.txt", "SHA256SUMS", "checksums.txt"]) {
+      if (!assets.some((a) => a.file === name)) continue;
+      try {
+        const txt = await getText(
+          `https://github.com/${app.repo}/releases/download/${tag}/${name}`,
+        );
+        for (const line of txt.split("\n")) {
+          const mm = line.trim().match(/^([a-f0-9]{64})\s+\*?(.+)$/i);
+          if (mm) checksums.set(mm[2].trim(), mm[1].toLowerCase());
+        }
+        if (checksums.size) break;
+      } catch {}
+    }
   }
 
   const resolved = [];
@@ -190,15 +228,21 @@ for (const app of cfg.apps) {
       failures++;
       continue;
     }
-    let size;
-    try {
-      size = await contentLength(hit.upstream);
-    } catch (e) {
-      console.error(`  ✗ ${app.repo}@${tag} ${hit.file}: ${e.message} — using 0`);
-      size = 0;
+    let size = apiSizes.get(hit.file) || 0;
+    if (!size) {
+      try {
+        size = await contentLength(hit.upstream);
+      } catch (e) {
+        console.error(`  ✗ ${app.repo}@${tag} ${hit.file}: ${e.message} — using 0`);
+        size = 0;
+      }
     }
     let sha256 = checksums.get(hit.file) || null;
-    if (!sha256 && /\.(pkg|7z|exe|deb|rpm|zip|AppImage)$/.test(hit.file)) {
+    if (
+      !sha256 &&
+      /\.(pkg|7z|exe|deb|rpm|zip|AppImage)$/.test(hit.file) &&
+      assets.some((a) => a.file === `${hit.file}.sha256`)
+    ) {
       try {
         const t = (await getText(`${hit.upstream}.sha256`)).trim();
         const mm = t.match(/([a-f0-9]{64})/i);
@@ -245,6 +289,25 @@ const flatDest = path.join(here, "catalog.json");
 if (dest !== flatDest) {
   try { fs.writeFileSync(flatDest, JSON.stringify(out, null, 2) + "\n"); } catch {}
 }
+
+// Also embed compacted catalog into index.html so the portal renders in 0ms without extra HTTP requests in China
+for (const idxCandidate of [path.join(root, "static", "index.html"), path.join(here, "index.html")]) {
+  if (fs.existsSync(idxCandidate)) {
+    try {
+      const html = fs.readFileSync(idxCandidate, "utf8");
+      const compactJson = JSON.stringify(out).replace(/<\//g, "<\\/");
+      const updatedHtml = html.replace(
+        /<script id="inlineCatalog" type="application\/json">[\s\S]*?<\/script>/,
+        `<script id="inlineCatalog" type="application/json">${compactJson}</script>`,
+      );
+      if (updatedHtml !== html) {
+        fs.writeFileSync(idxCandidate, updatedHtml);
+        console.log(`embedded inline catalog into ${path.relative(root, idxCandidate) || "index.html"}`);
+      }
+    } catch {}
+  }
+}
+
 console.log(`\nwrote ${path.relative(root, dest)}  (${(fs.statSync(dest).size / 1024).toFixed(1)} KB)`);
 if (failures) {
   console.error(`\n${failures} problem(s) — see above`);

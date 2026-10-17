@@ -1,36 +1,36 @@
 {
-  "updated": "2026-08-27T03:53:48.459Z",
+  "updated": "2026-10-17T15:45:29.952Z",
   "resolver": "releases.atom + expanded_assets (not the rate-limited REST API)",
   "sources": [
     {
       "id": "self",
-      "label": "This site",
+      "label": "This site (Direct)",
       "base": "",
       "mode": "self"
     },
     {
-      "id": "gh",
-      "label": "GitHub (official)",
-      "base": "https://github.com",
-      "mode": "raw"
+      "id": "ghfast",
+      "label": "China Fast CDN 1",
+      "base": "https://ghfast.top/",
+      "mode": "prefix"
     },
     {
       "id": "ghproxy",
-      "label": "Mirror A",
+      "label": "China Fast CDN 2",
       "base": "https://gh-proxy.com/",
       "mode": "prefix"
     },
     {
       "id": "ghproxy2",
-      "label": "Mirror B",
+      "label": "China Fast CDN 3",
       "base": "https://ghproxy.net/",
       "mode": "prefix"
     },
     {
-      "id": "gofans",
-      "label": "Mirror C",
-      "base": "https://ghfast.top/",
-      "mode": "prefix"
+      "id": "gh",
+      "label": "GitHub (Official)",
+      "base": "https://github.com",
+      "mode": "raw"
     }
   ],
   "ios": [
@@ -107,8 +107,8 @@
       "tagline": "Recommended · Android pick",
       "why": "Top Android pick · Mihomo core (Clash Meta), full VLESS + REALITY, Hysteria, TUIC, best compatibility with your VPN. Most powerful and actively maintained Android client.",
       "repo": "MetaCubeX/ClashMetaForAndroid",
-      "tag": "v2.11.33",
-      "latestTag": "v2.11.33",
+      "tag": "v2.11.35",
+      "latestTag": "Prerelease-alpha",
       "os": [
         "android"
       ],
@@ -118,44 +118,44 @@
           "label": "Android arm64 (most phones)",
           "primary": true,
           "internal": false,
-          "file": "cmfa-2.11.33-meta-arm64-v8a-release.apk",
-          "size": 44839517,
-          "sha256": null,
-          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-arm64-v8a-release.apk",
-          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-arm64-v8a-release.apk"
+          "file": "cmfa-2.11.35-meta-arm64-v8a-release.apk",
+          "size": 48780036,
+          "sha256": "af7f05d8801798a8e75de682e5f67070138becb8623b7a341c3e5cd042a3753d",
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-arm64-v8a-release.apk"
         },
         {
           "os": "android",
           "label": "Android armv7 (older phones)",
           "primary": false,
           "internal": false,
-          "file": "cmfa-2.11.33-meta-armeabi-v7a-release.apk",
-          "size": 45114811,
-          "sha256": null,
-          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-armeabi-v7a-release.apk",
-          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-armeabi-v7a-release.apk"
+          "file": "cmfa-2.11.35-meta-armeabi-v7a-release.apk",
+          "size": 48742314,
+          "sha256": "11c249a17ade5d714d63a8c8c3bb02a0371790467d0b1f5c8747671a36adbb6c",
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-armeabi-v7a-release.apk"
         },
         {
           "os": "android",
           "label": "Android universal (all devices)",
           "primary": false,
           "internal": false,
-          "file": "cmfa-2.11.33-meta-universal-release.apk",
-          "size": 109026349,
-          "sha256": null,
-          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-universal-release.apk",
-          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-universal-release.apk"
+          "file": "cmfa-2.11.35-meta-universal-release.apk",
+          "size": 124293900,
+          "sha256": "e53244936d150060d1d6a2d30f8c6fd3b59de315c3bb5f1d74874ac4a7331249",
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-universal-release.apk"
         },
         {
           "os": "android",
           "label": "Android x86_64 (emulator)",
           "primary": false,
           "internal": false,
-          "file": "cmfa-2.11.33-meta-x86_64-release.apk",
-          "size": 46667230,
-          "sha256": null,
-          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-x86_64-release.apk",
-          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.33/cmfa-2.11.33-meta-x86_64-release.apk"
+          "file": "cmfa-2.11.35-meta-x86_64-release.apk",
+          "size": 50700611,
+          "sha256": "a722aef0988f3ac90ab2b04755bb5a3f69ddd68fc38744c1ab04d2543d45af45",
+          "rel": "MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk",
+          "upstream": "https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.35/cmfa-2.11.35-meta-x86_64-release.apk"
         }
       ]
     },
@@ -165,8 +165,8 @@
       "tagline": "Clash Meta · multi-platform",
       "why": "Modern UI based on Clash Meta (mihomo) core, supports VLESS + REALITY + Hysteria, easy subscription import, works on Android and desktop. Great alternative to Clash Meta.",
       "repo": "chen08209/FlClash",
-      "tag": "v0.8.96",
-      "latestTag": "v0.8.96",
+      "tag": "v0.9.1",
+      "latestTag": "v0.9.1",
       "os": [
         "android",
         "windows",
@@ -179,99 +179,99 @@
           "label": "Android arm64 (most phones)",
           "primary": true,
           "internal": false,
-          "file": "FlClash-0.8.96-android-arm64-v8a.apk",
-          "size": 54956171,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-arm64-v8a.apk",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-arm64-v8a.apk"
+          "file": "FlClash-0.9.1-android-arm64-v8a.apk",
+          "size": 60894491,
+          "sha256": "7a8aeedbe3c376b724a1f76521f5322df1da4bb8d8e09833a2fa804b2913ecc2",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-arm64-v8a.apk"
         },
         {
           "os": "android",
           "label": "Android armv7 (older phones)",
           "primary": false,
           "internal": false,
-          "file": "FlClash-0.8.96-android-armeabi-v7a.apk",
-          "size": 54881045,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-armeabi-v7a.apk",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-armeabi-v7a.apk"
+          "file": "FlClash-0.9.1-android-armeabi-v7a.apk",
+          "size": 60876375,
+          "sha256": "c55d8c4d88a3d848cd58925126275d2eece84bd7ecab79e11530b5871dec2509",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-armeabi-v7a.apk"
         },
         {
           "os": "android",
           "label": "Android x86_64 (emulator)",
           "primary": false,
           "internal": false,
-          "file": "FlClash-0.8.96-android-x86_64.apk",
-          "size": 57217346,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-x86_64.apk",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-android-x86_64.apk"
+          "file": "FlClash-0.9.1-android-x86_64.apk",
+          "size": 63403453,
+          "sha256": "a03bb141b5163f7813fd11b9130ed3811cf09c03ac50f85aef292f8ad06e7a05",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-android-x86_64.apk"
         },
         {
           "os": "windows",
           "label": "Windows x64 installer",
           "primary": true,
           "internal": false,
-          "file": "FlClash-0.8.96-windows-amd64-setup.exe",
-          "size": 37771618,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64-setup.exe",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64-setup.exe"
+          "file": "FlClash-0.9.1-windows-amd64-setup.exe",
+          "size": 43219493,
+          "sha256": "6d3008315bc87a96064329935eac62ae322b2f6cf7c725170a94d0798f657cd4",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64-setup.exe"
         },
         {
           "os": "windows",
           "label": "Windows x64 portable",
           "primary": false,
           "internal": false,
-          "file": "FlClash-0.8.96-windows-amd64.zip",
-          "size": 60321930,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64.zip",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-windows-amd64.zip"
+          "file": "FlClash-0.9.1-windows-amd64.zip",
+          "size": 68669175,
+          "sha256": "f943ceb96fdf0bce8ddf080292f6009631b3be29250b7438701b7e8162840f21",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-windows-amd64.zip"
         },
         {
           "os": "macos",
           "label": "macOS Apple silicon",
           "primary": true,
           "internal": false,
-          "file": "FlClash-0.8.96-macos-arm64.dmg",
-          "size": 65481807,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-arm64.dmg",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-arm64.dmg"
+          "file": "FlClash-0.9.1-macos-arm64.dmg",
+          "size": 59133289,
+          "sha256": "ef904fb991a9ed5f0deaedb0a66f4a45dccfceeb45225d602fad3f2246aa9b99",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-arm64.dmg"
         },
         {
           "os": "macos",
           "label": "macOS Intel",
           "primary": false,
           "internal": false,
-          "file": "FlClash-0.8.96-macos-amd64.dmg",
-          "size": 67904833,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-amd64.dmg",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-macos-amd64.dmg"
+          "file": "FlClash-0.9.1-macos-amd64.dmg",
+          "size": 62984732,
+          "sha256": "01bf8bc434a7f035fe2c27736f061c3cb7721e63771000277711840dde0d5219",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-macos-amd64.dmg"
         },
         {
           "os": "linux",
           "label": "Linux .deb (Ubuntu/Debian)",
           "primary": true,
           "internal": false,
-          "file": "FlClash-0.8.96-linux-amd64.deb",
-          "size": 42085932,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.deb",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.deb"
+          "file": "FlClash-0.9.1-linux-amd64.deb",
+          "size": 48045408,
+          "sha256": "33efbb0ccf747d14294291ae1f0db950dae34f453cb51d4374e6cb6a17e22917",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.deb"
         },
         {
           "os": "linux",
           "label": "Linux AppImage",
           "primary": false,
           "internal": false,
-          "file": "FlClash-0.8.96-linux-amd64.AppImage",
-          "size": 61789376,
-          "sha256": null,
-          "rel": "chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.AppImage",
-          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.8.96/FlClash-0.8.96-linux-amd64.AppImage"
+          "file": "FlClash-0.9.1-linux-amd64.AppImage",
+          "size": 69715136,
+          "sha256": "2b1325191dde365e6036ef41aac6f443ae5a15dc69fac61dc4d35dd9729f90a3",
+          "rel": "chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage",
+          "upstream": "https://github.com/chen08209/FlClash/releases/download/v0.9.1/FlClash-0.9.1-linux-amd64.AppImage"
         }
       ]
     },
@@ -281,8 +281,8 @@
       "tagline": "Recommended · desktop pick",
       "why": "mihomo core, full VLESS + REALITY support, the friendliest UI, one-click subscription import.",
       "repo": "clash-verge-rev/clash-verge-rev",
-      "tag": "v2.5.2",
-      "latestTag": "v2.5.2",
+      "tag": "v2.5.8",
+      "latestTag": "v2.5.8",
       "os": [
         "windows",
         "macos",
@@ -294,77 +294,77 @@
           "label": "Windows x64 installer",
           "primary": true,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_x64-setup.exe",
-          "size": 46964366,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64-setup.exe",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64-setup.exe"
+          "file": "Clash.Verge_2.5.8_x64-setup.exe",
+          "size": 60230483,
+          "sha256": "821c0f5957f84c8f7d14532044840e8280d708af24a6a143db360b49bd1e7302",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64-setup.exe"
         },
         {
           "os": "windows",
           "label": "Windows ARM64",
           "primary": false,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_arm64-setup.exe",
-          "size": 41452521,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_arm64-setup.exe",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_arm64-setup.exe"
+          "file": "Clash.Verge_2.5.8_arm64-setup.exe",
+          "size": 53952182,
+          "sha256": "077efab7874a6be7c48630d19c941ef679fa265f79c243f9d20ce5878eb5a943",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_arm64-setup.exe"
         },
         {
           "os": "windows",
           "label": "Pre-Win10 / no WebView2",
           "primary": false,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe",
-          "size": 237316704,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64_fixed_webview2-setup.exe"
+          "file": "Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe",
+          "size": 250400964,
+          "sha256": "78d8cb9fdfc1140c7846314848d09db7a39e46af68351876ea7357db922f39fe",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64_fixed_webview2-setup.exe"
         },
         {
           "os": "macos",
           "label": "macOS Apple silicon (M1–M4)",
           "primary": false,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_aarch64.dmg",
-          "size": 60935420,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_aarch64.dmg",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_aarch64.dmg"
+          "file": "Clash.Verge_2.5.8_aarch64.dmg",
+          "size": 81825361,
+          "sha256": "1f7c3a73970f103fc3cb9944744772fa1540160f05911e033ffc57f7c9f860ec",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_aarch64.dmg"
         },
         {
           "os": "macos",
           "label": "macOS Intel",
           "primary": true,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_x64.dmg",
-          "size": 65843472,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64.dmg",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_x64.dmg"
+          "file": "Clash.Verge_2.5.8_x64.dmg",
+          "size": 87523387,
+          "sha256": "8cdf7a01a1c548a081339aff21b2599d60f67730d05485e90831f4bbdbf3b093",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_x64.dmg"
         },
         {
           "os": "linux",
           "label": "Linux .deb (Ubuntu/Debian)",
           "primary": true,
           "internal": false,
-          "file": "Clash.Verge_2.5.2_amd64.deb",
-          "size": 83045404,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_amd64.deb",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge_2.5.2_amd64.deb"
+          "file": "Clash.Verge_2.5.8_amd64.deb",
+          "size": 104179124,
+          "sha256": "ceeb7578c6f030b33ddf6346486db24013cf4557cc340de5f312f98a924a8546",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge_2.5.8_amd64.deb"
         },
         {
           "os": "linux",
           "label": "Linux .rpm (Fedora/openSUSE)",
           "primary": false,
           "internal": false,
-          "file": "Clash.Verge-2.5.2-1.x86_64.rpm",
-          "size": 83035866,
-          "sha256": null,
-          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge-2.5.2-1.x86_64.rpm",
-          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.2/Clash.Verge-2.5.2-1.x86_64.rpm"
+          "file": "Clash.Verge-2.5.8-1.x86_64.rpm",
+          "size": 104176465,
+          "sha256": "ad378ea9fb12ebae49500fcddb0435fd67abef79d828b654368e0f67b5785c2e",
+          "rel": "clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm",
+          "upstream": "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.5.8/Clash.Verge-2.5.8-1.x86_64.rpm"
         }
       ]
     },
@@ -374,8 +374,8 @@
       "tagline": "formerly mihomo-party",
       "why": "mihomo-party was renamed Clash Party. Bundles its own core and ships a Windows 7 build — use it for customers on old machines.",
       "repo": "mihomo-party-org/clash-party",
-      "tag": "v2.0.2",
-      "latestTag": "v2.0.2",
+      "tag": "v2.0.3",
+      "latestTag": "v2.0.3",
       "os": [
         "windows",
         "macos",
@@ -387,66 +387,66 @@
           "label": "Windows 7 x64 (old machines)",
           "primary": true,
           "internal": false,
-          "file": "clash-party-win7-2.0.2-x64-setup.exe",
-          "size": 152925625,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-x64-setup.exe"
+          "file": "clash-party-win7-2.0.3-x64-setup.exe",
+          "size": 170405716,
+          "sha256": "190474e08cd8a0a6db180be745fa6ad420aecc3c5468dc2ffd55fe869a4072f5",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-x64-setup.exe"
         },
         {
           "os": "windows",
           "label": "Windows 7 32-bit",
           "primary": false,
           "internal": false,
-          "file": "clash-party-win7-2.0.2-ia32-setup.exe",
-          "size": 146756009,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-win7-2.0.2-ia32-setup.exe"
+          "file": "clash-party-win7-2.0.3-ia32-setup.exe",
+          "size": 162854414,
+          "sha256": "dc25d336f2bfd028495749fa10fa0e0c6ec62b9219e2362fb72a354b7db73101",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-win7-2.0.3-ia32-setup.exe"
         },
         {
           "os": "windows",
           "label": "Windows x64 (Win10/11)",
           "primary": false,
           "internal": false,
-          "file": "clash-party-windows-2.0.2-x64-setup.exe",
-          "size": 183658985,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-windows-2.0.2-x64-setup.exe"
+          "file": "clash-party-windows-2.0.3-x64-setup.exe",
+          "size": 208253928,
+          "sha256": "bcb3f642124aa85574d47c5242c15803d0eefbaf0240f545ded31c70a1e0c3db",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-windows-2.0.3-x64-setup.exe"
         },
         {
           "os": "macos",
           "label": "macOS Apple silicon .pkg",
           "primary": false,
           "internal": false,
-          "file": "clash-party-macos-2.0.2-arm64.pkg",
-          "size": 229845688,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-arm64.pkg"
+          "file": "clash-party-macos-2.0.3-arm64.pkg",
+          "size": 244121821,
+          "sha256": "e4699bb29ec60810553c9358b1744538476251d78a978119ce2702a040210545",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-arm64.pkg"
         },
         {
           "os": "macos",
           "label": "macOS Intel .pkg",
           "primary": false,
           "internal": false,
-          "file": "clash-party-macos-2.0.2-x64.pkg",
-          "size": 244803135,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-macos-2.0.2-x64.pkg"
+          "file": "clash-party-macos-2.0.3-x64.pkg",
+          "size": 262351524,
+          "sha256": "3233641f78cc0424ad54606946ce442cb2c4c823d491f5bc96d16f87f898cc0a",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-macos-2.0.3-x64.pkg"
         },
         {
           "os": "linux",
           "label": "Linux .deb",
           "primary": false,
           "internal": false,
-          "file": "clash-party-linux-2.0.2-amd64.deb",
-          "size": 189303364,
-          "sha256": null,
-          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb",
-          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.2/clash-party-linux-2.0.2-amd64.deb"
+          "file": "clash-party-linux-2.0.3-amd64.deb",
+          "size": 201959128,
+          "sha256": "a45ecdecba85b6f3662851a6013d31874ac5e0f91df855dc68b39aec4b2c463d",
+          "rel": "mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb",
+          "upstream": "https://github.com/mihomo-party-org/clash-party/releases/download/v2.0.3/clash-party-linux-2.0.3-amd64.deb"
         }
       ]
     },
@@ -469,7 +469,7 @@
           "internal": false,
           "file": "NekoBox-1.4.2-arm64-v8a.apk",
           "size": 15252519,
-          "sha256": null,
+          "sha256": "d01e76feeb05e4701f3ae382cb71c0a3ebb77039005e5893f8817e1051f8ac28",
           "rel": "MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk",
           "upstream": "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-arm64-v8a.apk"
         },
@@ -480,7 +480,7 @@
           "internal": false,
           "file": "NekoBox-1.4.2-armeabi-v7a.apk",
           "size": 15509280,
-          "sha256": null,
+          "sha256": "e21f4b1c09696e0fd8ff594db42fcec41d1ad1254b356e08c2fa6e9c5bfed10b",
           "rel": "MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk",
           "upstream": "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.2/NekoBox-1.4.2-armeabi-v7a.apk"
         }
@@ -492,8 +492,8 @@
       "tagline": "sing-box desktop",
       "why": "The community successor after NekoRay went unmaintained. Cross-platform, good REALITY support.",
       "repo": "throneproj/Throne",
-      "tag": "1.2.4",
-      "latestTag": "1.2.4",
+      "tag": "1.3.2",
+      "latestTag": "1.4.0-beta.2",
       "os": [
         "windows",
         "macos",
@@ -505,44 +505,44 @@
           "label": "Windows universal installer",
           "primary": true,
           "internal": false,
-          "file": "Throne-1.2.4-windows-universal-installer.exe",
-          "size": 107560714,
-          "sha256": null,
-          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windows-universal-installer.exe",
-          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windows-universal-installer.exe"
+          "file": "Throne-1.3.2-windows-universal-installer.exe",
+          "size": 147662477,
+          "sha256": "4df6a09eabc19a797b7e94b49790c63e3e5a90749898b5749f496d2a44e9c0c7",
+          "rel": "throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windows-universal-installer.exe"
         },
         {
           "os": "windows",
           "label": "Windows 7/8 64-bit",
           "primary": false,
           "internal": false,
-          "file": "Throne-1.2.4-windowslegacy64.zip",
-          "size": 35444339,
-          "sha256": null,
-          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windowslegacy64.zip",
-          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-windowslegacy64.zip"
+          "file": "Throne-1.3.2-windowslegacy64.zip",
+          "size": 47189687,
+          "sha256": "c445556933484caacc5dd7e8b89bcb96b1b455d151f4654c91b4074393412b07",
+          "rel": "throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-windowslegacy64.zip"
         },
         {
           "os": "macos",
           "label": "macOS Apple silicon",
           "primary": false,
           "internal": false,
-          "file": "Throne-1.2.4-macos-arm64.zip",
-          "size": 50861032,
-          "sha256": null,
-          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-macos-arm64.zip",
-          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-macos-arm64.zip"
+          "file": "Throne-1.3.2-macos-arm64.zip",
+          "size": 64125334,
+          "sha256": "c5371633f17e46d18d999206a79bafe4ec1b20e03acf51171261f3084b702b16",
+          "rel": "throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-macos-arm64.zip"
         },
         {
           "os": "linux",
           "label": "Linux amd64",
           "primary": false,
           "internal": false,
-          "file": "Throne-1.2.4-linux-amd64.zip",
-          "size": 63136241,
-          "sha256": null,
-          "rel": "throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-linux-amd64.zip",
-          "upstream": "https://github.com/throneproj/Throne/releases/download/1.2.4/Throne-1.2.4-linux-amd64.zip"
+          "file": "Throne-1.3.2-linux-amd64.zip",
+          "size": 76468899,
+          "sha256": "e8af3be3e1bf54884539e4c631965af339acd703d8c69ea732575be9a71dd8a8",
+          "rel": "throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip",
+          "upstream": "https://github.com/throneproj/Throne/releases/download/1.3.2/Throne-1.3.2-linux-amd64.zip"
         }
       ]
     },
@@ -552,8 +552,8 @@
       "tagline": "Server / advanced users",
       "why": "The server-side core itself, or for customers who run their own node. Ordinary customers don't need this.",
       "repo": "XTLS/Xray-core",
-      "tag": "v26.7.28",
-      "latestTag": "v26.7.28",
+      "tag": "v26.10.17",
+      "latestTag": "v26.10.17",
       "os": [
         "windows",
         "macos",
@@ -566,10 +566,10 @@
           "primary": true,
           "internal": false,
           "file": "Xray-linux-64.zip",
-          "size": 21164807,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip"
+          "size": 20698929,
+          "sha256": "ecdd54eccd24c4c21a8f00968e7dbf7f5996da92383d2321170b560dc4a95158",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip"
         },
         {
           "os": "linux",
@@ -577,10 +577,10 @@
           "primary": false,
           "internal": false,
           "file": "Xray-linux-arm64-v8a.zip",
-          "size": 19699639,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-arm64-v8a.zip",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-arm64-v8a.zip"
+          "size": 19192144,
+          "sha256": "4ebdad86048fa499e65334f88a120b1ed17e662f1c222afd3514afdf8820cdb1",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-arm64-v8a.zip"
         },
         {
           "os": "macos",
@@ -588,10 +588,10 @@
           "primary": false,
           "internal": false,
           "file": "Xray-macos-arm64-v8a.zip",
-          "size": 19753246,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-macos-arm64-v8a.zip",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-macos-arm64-v8a.zip"
+          "size": 19274058,
+          "sha256": "57531c66df375da671f66cad1443f63e90410b83d09baf226e2f26f2748aae0f",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-macos-arm64-v8a.zip"
         },
         {
           "os": "windows",
@@ -599,10 +599,10 @@
           "primary": false,
           "internal": false,
           "file": "Xray-windows-64.zip",
-          "size": 20987981,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-windows-64.zip",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-windows-64.zip"
+          "size": 20633384,
+          "sha256": "c10a532a9271964f2aa2f4b4c0757605ff529222cb1d5d7ab88f8ecc52e67fb0",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-windows-64.zip"
         },
         {
           "os": "windows",
@@ -610,10 +610,10 @@
           "primary": false,
           "internal": false,
           "file": "Xray-win7-64.zip",
-          "size": 20988505,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-win7-64.zip",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-win7-64.zip"
+          "size": 20633486,
+          "sha256": "38373b1ccc6dd36f1262cdccc98cb83e10c8dc62577b1d8d8fa8b595962de4c0",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-win7-64.zip"
         },
         {
           "os": "linux",
@@ -622,9 +622,9 @@
           "internal": true,
           "file": "Xray-linux-64.zip.dgst",
           "size": 299,
-          "sha256": null,
-          "rel": "XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip.dgst",
-          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.7.28/Xray-linux-64.zip.dgst"
+          "sha256": "40cbf01ab0bbd9c636f135478541320d9478d7b27be653541a1cc960779f3f6c",
+          "rel": "XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst",
+          "upstream": "https://github.com/XTLS/Xray-core/releases/download/v26.10.17/Xray-linux-64.zip.dgst"
         }
       ]
     }

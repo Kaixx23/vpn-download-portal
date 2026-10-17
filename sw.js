@@ -1,7 +1,7 @@
 /* sw.js — makes the portal open even when the network is flaky.
  * Page shell + catalog: stale-while-revalidate. Installer downloads: never
  * cached here (they're huge; let the CDN/OS handle them). */
-const CACHE = 'portal-v1';
+const CACHE = 'portal-v2';
 const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/vendor/qrcode.mjs', '/catalog.json'];
 
 self.addEventListener('install', (e) => {
@@ -23,6 +23,22 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith('/m/')) return; // big binaries — pass through
+
+  // Network-first for HTML page navigations so password/config updates apply immediately
+  if (req.mode === 'navigate' || url.pathname === '/' || url.pathname === '/index.html') {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.status === 200 && res.type === 'basic') {
+            const clone = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, clone)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => caches.match(req)),
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(req).then((hit) => {
