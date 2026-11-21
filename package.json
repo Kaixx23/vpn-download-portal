@@ -8,7 +8,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build:catalog": "node scripts/build-catalog.mjs",
+    "build:catalog": "node build-catalog.mjs",
+    "configure:china-cdn": "node scripts/configure-china-cdn.mjs",
+    "sync:oss-assets": "node scripts/sync-oss-assets.mjs",
     "test": "node --test test/"
   },
   "devDependencies": {

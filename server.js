@@ -146,16 +146,35 @@ async function serveStatic(req, res, pathname) {
 async function fetchUpstreamAsset(upstream, method, range) {
   const cached = SIGNED_URL_CACHE.get(upstream);
   let url = cached && Date.now() - cached.ts < SIGNED_TTL_MS ? cached.url : upstream;
+  let usedCachedUrl = url !== upstream;
   for (let i = 0; i < 6; i++) {
-    const res = await fetch(url, {
-      method,
-      redirect: "manual",
-      headers: {
-        "user-agent": "vpn-mirror/1.0",
-        "accept-encoding": "identity",
-        ...(range ? { range } : {}),
-      },
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    let res;
+    try {
+      res = await fetch(url, {
+        method,
+        redirect: "manual",
+        signal: controller.signal,
+        headers: {
+          "user-agent": "vpn-mirror/1.0",
+          "accept-encoding": "identity",
+          ...(range ? { range } : {}),
+        },
+      });
+    } finally {
+      // Bound DNS/TLS/redirect-header stalls, but do not impose a time limit on
+      // the actual installer stream after its response headers arrive.
+      clearTimeout(timeout);
+    }
+    if (usedCachedUrl && (res.status === 401 || res.status === 403)) {
+      await res.body?.cancel().catch(() => {});
+      SIGNED_URL_CACHE.delete(upstream);
+      url = upstream;
+      usedCachedUrl = false;
+      i--;
+      continue;
+    }
     if (res.status >= 300 && res.status < 400) {
       const loc = res.headers.get("location");
       if (!loc) break;
@@ -163,6 +182,7 @@ async function fetchUpstreamAsset(upstream, method, range) {
       if (!isTrustedHost(next.hostname)) break;
       url = next.toString();
       SIGNED_URL_CACHE.set(upstream, { url, ts: Date.now() });
+      usedCachedUrl = false;
       continue;
     }
     return { url, res };
@@ -209,6 +229,16 @@ async function handleMirror(req, res, m) {
 
   const body = up.res;
   if (!body.ok && body.status !== 206) {
+    // A transient GitHub/asset-CDN failure should not strand the user on this
+    // mirror. Try the configured public proxy for throttling and server errors.
+    if (!process.env.UPSTREAM_BASE && [429, 500, 502, 503, 504].includes(body.status)) {
+      await body.body?.cancel().catch(() => {});
+      return send(res, 302, "Redirecting to alternate download line…", {
+        location: `https://gh-proxy.com/${upstream}`,
+        "cache-control": "no-store",
+        "x-mirror-mode": "cdn-fallback",
+      });
+    }
     return send(res, body.status, `Upstream returned ${body.status}`);
   }
 

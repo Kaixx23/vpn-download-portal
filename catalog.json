@@ -10,20 +10,14 @@
     },
     {
       "id": "ghproxy",
-      "label": "China Fast CDN 1",
+      "label": "Alternate download line 1",
       "base": "https://gh-proxy.com/",
       "mode": "prefix"
     },
     {
       "id": "ghproxy2",
-      "label": "China Fast CDN 2",
+      "label": "Alternate download line 2",
       "base": "https://ghproxy.net/",
-      "mode": "prefix"
-    },
-    {
-      "id": "ghfast",
-      "label": "China Fast CDN 3",
-      "base": "https://ghfast.top/",
       "mode": "prefix"
     },
     {

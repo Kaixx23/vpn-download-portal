@@ -37,42 +37,14 @@ netlify deploy --prod --dir=.
 | `/api/manifest` | Redirects to `/catalog.json` (200) | `netlify.toml` |
 | `/vendor/qrcode.mjs` | Redirects to `/qrcode.mjs` (flat layout compat) | `netlify.toml` |
 | `/healthz` | Returns `{"ok":true}` JSON via Edge Function | `netlify/edge-functions/healthz.js` |
-| `/m/*` | **Redirect mode** (default): 302 to `https://github.com/:splat` | `netlify.toml` |
+| `/m/*` | Edge Function probes GitHub and two alternate origins with a small byte range, then 302-redirects to the first origin that returns bytes. The installer itself is not streamed through Netlify. | `netlify/edge-functions/mirror.js` |
 | `/*` | SPA fallback to `/index.html` | `netlify.toml` |
 
-### Redirect mode vs Mirror mode
+### Adaptive download routing
 
-**Current default (redirect mode)** - in `netlify.toml`:
+The `/m/*` Edge Function races a 512 KiB range request against GitHub's release CDN and two alternate GitHub proxy origins. It redirects the browser to the first origin that successfully returns the sample; failed or non-range responses are not selected. The Edge Function does not proxy the full installer, avoiding a large-file transfer through the function. If every probe fails, it returns HTTP 503 rather than sending the customer to a known-failing route.
 
-```toml
-[[redirects]]
-  from = "/m/*"
-  to = "https://github.com/:splat"
-  status = 302
-```
-
-- ✅ Works on Netlify free tier (no bandwidth cost for large files)
-- ✅ No function timeout issues
-- ❌ Client hits `github.com` directly (may be throttled in China)
-- ✅ But users can switch to **Mirror A/B/C** in the UI (gh-proxy.com etc) which *do* proxy
-
-**True mirror mode** - proxy through Netlify Edge:
-
-1. In `netlify.toml`, comment out the `/m/*` redirect
-2. Uncomment:
-
-```toml
-[[edge_functions]]
-  path = "/m/*"
-  function = "mirror"
-```
-
-3. Deploy
-
-- ✅ Client never touches GitHub (like VPS MODE=mirror)
-- ❌ Large APKs (50MB+) may hit Netlify Edge limits on free tier
-- ❌ 100GB/month bandwidth limit on free tier
-- For production China use, VPS + Caddy is still recommended (see README.md)
+This selection is made from Netlify's edge location, which is a useful approximation—not a guarantee—of the customer's route. A regional CDN or a server with a better route to the customer's ISP is still required for consistently high speeds. For production use, see the hosting guidance in README.md.
 
 ## Updating the catalog
 
