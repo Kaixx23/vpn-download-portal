@@ -1,6 +1,6 @@
 [build]
   publish = "."
-  command = "echo 'No build needed - catalog.json is prebuilt'"
+  command = "node scripts/configure-china-cdn.mjs"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -53,9 +53,10 @@
   status = 200
   force = true
 
-# --- Download mirroring ---
-# High-speed Direct CDN Resolver via Edge Function (resolves github.com server-side to
-# pre-signed S3/Fastly CDN URL so downloads run at full 5G speed with exact Content-Length)
+# --- Download fallback ---
+# The /m/* Edge Function (declared below) races range probes against GitHub and
+# two alternate origins, then redirects to the first healthy responder. This
+# redirect is only the platform fallback if the Edge Function is unavailable.
 [[redirects]]
   from = "/m/*"
   to = "https://gh-proxy.com/https://github.com/:splat"
